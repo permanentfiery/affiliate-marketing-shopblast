@@ -32,5 +32,5 @@ window.addProduct = async function () {
 
   await addToDB({ name, price, link });
 
-  alert("Added!");
+  alert("Product added");
 };
