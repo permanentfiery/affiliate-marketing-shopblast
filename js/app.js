@@ -1,17 +1,30 @@
-import { db } from "./firebase.js";
-import {
-  collection,
-  getDocs,
-  addDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getProducts } from "./db.js";
 
-const col = collection(db, "products");
+let products = [];
 
-export async function getProducts() {
-  const snap = await getDocs(col);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+async function loadProducts() {
+  products = await getProducts();
+  render(products);
 }
 
-export async function addProduct(product) {
-  await addDoc(col, product);
+function render(list) {
+  const grid = document.getElementById("productGrid");
+
+  grid.innerHTML = list.map(p => `
+    <div class="card">
+      <h3>${p.name}</h3>
+      <p>₹${(p.price / 100).toFixed(2)}</p>
+      <a href="${p.link}" target="_blank" class="buy">BUY</a>
+    </div>
+  `).join("");
 }
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(q)
+  );
+  render(filtered);
+});
+
+loadProducts();
