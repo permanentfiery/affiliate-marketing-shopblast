@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin</title>
+<title>Admin Panel</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-<h2>Admin Panel</h2>
+<h2>Admin Login</h2>
 
 <div id="loginBox">
   <input id="email" placeholder="Email">
@@ -16,10 +16,11 @@
 </div>
 
 <div id="adminPanel" style="display:none;">
-  <input id="name" placeholder="Product name">
+  <h3>Add Product</h3>
+  <input id="name" placeholder="Name">
   <input id="price" placeholder="Price">
-  <input id="link" placeholder="Affiliate link">
-  <button onclick="addProduct()">Add Product</button>
+  <input id="link" placeholder="Affiliate Link">
+  <button onclick="addProduct()">Add</button>
 </div>
 
 <script type="module" src="js/admin.js"></script>
