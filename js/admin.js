@@ -7,48 +7,109 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// LOGIN
-window.login = async function () {
+// Wait for DOM
+document.addEventListener("DOMContentLoaded", () => {
+
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const addBtn = document.getElementById("addBtn");
+
   const emailEl = document.getElementById("email");
   const passEl = document.getElementById("password");
 
-  if (!emailEl || !passEl) {
-    alert("Input fields not found");
-    return;
+  const nameEl = document.getElementById("name");
+  const priceEl = document.getElementById("price");
+  const linkEl = document.getElementById("link");
+  const imageEl = document.getElementById("image");
+  const dealEl = document.getElementById("deal");
+
+  const loginBox = document.getElementById("loginBox");
+  const adminPanel = document.getElementById("adminPanel");
+
+  // 🔐 LOGIN
+  if (loginBtn) {
+    loginBtn.addEventListener("click", async () => {
+      const email = emailEl.value.trim();
+      const pass = passEl.value.trim();
+
+      console.log("Login clicked");
+
+      if (!email || !pass) {
+        alert("Enter email and password");
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        alert("Login successful");
+      } catch (err) {
+        alert("Login failed: " + err.message);
+      }
+    });
   }
 
-  const email = emailEl.value.trim();
-  const pass = passEl.value.trim();
-
-  console.log("EMAIL:", email);
-  console.log("PASS LENGTH:", pass.length);
-
-  if (email === "" || pass === "") {
-    alert("Enter email and password");
-    return;
+  // 🔓 LOGOUT
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      location.reload();
+    });
   }
 
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-    alert("Login successful");
-  } catch (err) {
-    alert("Login failed: " + err.message);
-  }
-};
+  // ➕ ADD PRODUCT
+  if (addBtn) {
+    addBtn.addEventListener("click", async () => {
+      if (!auth.currentUser) {
+        alert("Not authorized");
+        return;
+      }
 
-// LOGOUT
-window.logout = async function () {
-  await signOut(auth);
-  location.reload();
-};
+      const name = nameEl.value.trim();
+      const priceInput = priceEl.value;
+      const link = linkEl.value.trim();
+      const image = imageEl.value.trim();
+      const deal = dealEl.value === "yes";
 
-// AUTH STATE
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    document.getElementById("adminPanel").style.display = "block";
-    document.getElementById("loginBox").style.display = "none";
-  } else {
-    document.getElementById("adminPanel").style.display = "none";
-    document.getElementById("loginBox").style.display = "block";
+      if (!name || !priceInput || !link) {
+        alert("Fill all required fields");
+        return;
+      }
+
+      const price = Math.round(parseFloat(priceInput) * 100);
+
+      try {
+        await addToDB({
+          name,
+          price,
+          link,
+          image: image || "",
+          deal
+        });
+
+        alert("Product added");
+
+        // clear fields
+        nameEl.value = "";
+        priceEl.value = "";
+        linkEl.value = "";
+        imageEl.value = "";
+        dealEl.value = "no";
+
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    });
   }
+
+  // 🔄 AUTH STATE
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      adminPanel.style.display = "block";
+      loginBox.style.display = "none";
+    } else {
+      adminPanel.style.display = "none";
+      loginBox.style.display = "block";
+    }
+  });
+
 });
