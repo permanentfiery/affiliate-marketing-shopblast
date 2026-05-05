@@ -9,7 +9,6 @@ import {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Elements
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const addBtn = document.getElementById("addBtn");
@@ -26,12 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginBox = document.getElementById("loginBox");
   const adminPanel = document.getElementById("adminPanel");
 
-  // 🔐 LOGIN
+  // LOGIN
   loginBtn.addEventListener("click", async () => {
     const email = emailEl.value.trim();
     const pass = passEl.value.trim();
-
-    console.log("Login clicked");
 
     if (!email || !pass) {
       alert("Enter email and password");
@@ -42,17 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
       await signInWithEmailAndPassword(auth, email, pass);
       alert("Login successful");
     } catch (err) {
-      alert("Login failed: " + err.message);
+      alert(err.message);
     }
   });
 
-  // 🔓 LOGOUT
+  // LOGOUT
   logoutBtn.addEventListener("click", async () => {
     await signOut(auth);
     location.reload();
   });
 
-  // ➕ ADD PRODUCT
+  // ADD PRODUCT (FIXED DEAL BOOLEAN)
   addBtn.addEventListener("click", async () => {
     if (!auth.currentUser) {
       alert("Not authorized");
@@ -63,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const priceInput = priceEl.value;
     const link = linkEl.value.trim();
     const image = imageEl.value.trim();
+
+    // 🔥 FORCE BOOLEAN
     const deal = dealEl.value === "yes";
 
     if (!name || !priceInput || !link) {
@@ -72,30 +71,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const price = Math.round(parseFloat(priceInput) * 100);
 
-    try {
-      await addToDB({
-        name,
-        price,
-        link,
-        image: image || "",
-        deal
-      });
+    await addToDB({
+      name,
+      price,
+      link,
+      image,
+      deal
+    });
 
-      alert("Product added");
+    alert("Product added");
 
-      // Clear fields
-      nameEl.value = "";
-      priceEl.value = "";
-      linkEl.value = "";
-      imageEl.value = "";
-      dealEl.value = "no";
-
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
+    nameEl.value = "";
+    priceEl.value = "";
+    linkEl.value = "";
+    imageEl.value = "";
+    dealEl.value = "no";
   });
 
-  // 🔄 AUTH STATE
+  // AUTH STATE
   onAuthStateChanged(auth, (user) => {
     if (user) {
       adminPanel.style.display = "block";
