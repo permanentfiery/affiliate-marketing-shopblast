@@ -5,9 +5,38 @@ let products = [];
 
 async function loadProducts() {
   products = await getProducts();
+  renderDeal(products);
   render(products);
 }
 
+// 🔥 DEAL OF THE DAY
+function renderDeal(products) {
+  const deal = products.find(p => p.deal);
+  const el = document.getElementById("dealSection");
+
+  if (!el) return;
+
+  if (!deal) {
+    el.innerHTML = "";
+    return;
+  }
+
+  const img = deal.image || "https://via.placeholder.com/100";
+
+  el.innerHTML = `
+    <div class="deal">
+      <h2>🔥 DEAL OF THE DAY</h2>
+      <img src="${img}">
+      <h3>${deal.name}</h3>
+      <p>₹${(deal.price / 100).toFixed(2)}</p>
+      <a href="${deal.link}" target="_blank" class="buy">
+        GRAB DEAL →
+      </a>
+    </div>
+  `;
+}
+
+// PRODUCTS
 function render(list) {
   const grid = document.getElementById("productGrid");
 
@@ -22,7 +51,7 @@ function render(list) {
         <a href="${p.link}" target="_blank" class="buy">BUY</a>
 
         ${
-          auth.currentUser
+          auth.currentUser && window.location.pathname.includes("admin")
             ? `<button onclick="deleteProduct('${p.id}')" class="delete-btn">DELETE</button>`
             : ""
         }
@@ -31,7 +60,7 @@ function render(list) {
   }).join("");
 }
 
-// 🔍 Search
+// SEARCH
 document.getElementById("searchInput").addEventListener("input", e => {
   const q = e.target.value.toLowerCase();
   const filtered = products.filter(p =>
@@ -40,7 +69,7 @@ document.getElementById("searchInput").addEventListener("input", e => {
   render(filtered);
 });
 
-// 🗑 DELETE FUNCTION
+// DELETE
 window.deleteProduct = async function(id) {
   if (!auth.currentUser) {
     alert("Not authorized");
@@ -51,7 +80,6 @@ window.deleteProduct = async function(id) {
   if (!confirmDelete) return;
 
   await deleteFromDB(id);
-
   loadProducts();
 };
 
