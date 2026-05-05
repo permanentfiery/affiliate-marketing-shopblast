@@ -1,12 +1,3 @@
-import { getProducts } from "./db.js";
-
-let products = [];
-
-async function loadProducts() {
-  products = await getProducts();
-  render(products);
-}
-
 function render(list) {
   const grid = document.getElementById("productGrid");
 
@@ -19,17 +10,11 @@ function render(list) {
         <h3>${p.name}</h3>
         <p>₹${(p.price / 100).toFixed(2)}</p>
         <a href="${p.link}" target="_blank" class="buy">BUY</a>
+
+        <button onclick="deleteProduct('${p.id}')" class="delete-btn">
+          DELETE
+        </button>
       </div>
     `;
   }).join("");
 }
-
-document.getElementById("searchInput").addEventListener("input", e => {
-  const q = e.target.value.toLowerCase();
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(q)
-  );
-  render(filtered);
-});
-
-loadProducts();
