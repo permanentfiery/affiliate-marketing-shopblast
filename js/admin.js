@@ -1,78 +1,109 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StealMyFinds Admin</title>
-<link rel="stylesheet" href="css/styles.css">
+import { auth } from "./firebase.js";
+import { addProduct as addToDB } from "./db.js";
 
-<style>
-body {
-  font-family: Arial;
-  padding: 20px;
-  background: #fafafa;
-}
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-.box {
-  max-width: 420px;
-  margin: auto;
-  border: 3px solid black;
-  padding: 20px;
-  background: white;
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-input, select {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-}
+  // Elements
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const addBtn = document.getElementById("addBtn");
 
-button {
-  padding: 10px;
-  cursor: pointer;
-  border: none;
-  background: black;
-  color: yellow;
-  font-weight: bold;
-  margin-top: 5px;
-}
+  const emailEl = document.getElementById("email");
+  const passEl = document.getElementById("password");
 
-.logout {
-  background: red;
-  color: white;
-}
-</style>
-</head>
+  const nameEl = document.getElementById("name");
+  const priceEl = document.getElementById("price");
+  const linkEl = document.getElementById("link");
+  const imageEl = document.getElementById("image");
+  const dealEl = document.getElementById("deal");
 
-<body>
+  const loginBox = document.getElementById("loginBox");
+  const adminPanel = document.getElementById("adminPanel");
 
-<h1>STEALMYFINDS ADMIN</h1>
+  // 🔐 LOGIN
+  loginBtn.addEventListener("click", async () => {
+    const email = emailEl.value.trim();
+    const pass = passEl.value.trim();
 
-<div id="loginBox" class="box">
-  <h3>Login</h3>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
-</div>
+    console.log("Login clicked");
 
-<div id="adminPanel" class="box" style="display:none;">
-  <h3>Add Product</h3>
+    if (!email || !pass) {
+      alert("Enter email and password");
+      return;
+    }
 
-  <input id="name" placeholder="Product Name">
-  <input id="price" placeholder="Price (e.g. 999.99)">
-  <input id="link" placeholder="Affiliate Link">
-  <input id="image" placeholder="Image URL">
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      alert("Login successful");
+    } catch (err) {
+      alert("Login failed: " + err.message);
+    }
+  });
 
-  <select id="deal">
-    <option value="no">Normal Product</option>
-    <option value="yes">🔥 Deal of the Day</option>
-  </select>
+  // 🔓 LOGOUT
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    location.reload();
+  });
 
-  <button id="addBtn">Add Product</button>
-  <button id="logoutBtn" class="logout">Logout</button>
-</div>
+  // ➕ ADD PRODUCT
+  addBtn.addEventListener("click", async () => {
+    if (!auth.currentUser) {
+      alert("Not authorized");
+      return;
+    }
 
-<script type="module" src="./js/admin.js"></script>
-</body>
-</html>
+    const name = nameEl.value.trim();
+    const priceInput = priceEl.value;
+    const link = linkEl.value.trim();
+    const image = imageEl.value.trim();
+    const deal = dealEl.value === "yes";
+
+    if (!name || !priceInput || !link) {
+      alert("Fill all required fields");
+      return;
+    }
+
+    const price = Math.round(parseFloat(priceInput) * 100);
+
+    try {
+      await addToDB({
+        name,
+        price,
+        link,
+        image: image || "",
+        deal
+      });
+
+      alert("Product added");
+
+      // Clear fields
+      nameEl.value = "";
+      priceEl.value = "";
+      linkEl.value = "";
+      imageEl.value = "";
+      dealEl.value = "no";
+
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  });
+
+  // 🔄 AUTH STATE
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      adminPanel.style.display = "block";
+      loginBox.style.display = "none";
+    } else {
+      adminPanel.style.display = "none";
+      loginBox.style.display = "block";
+    }
+  });
+
+});
