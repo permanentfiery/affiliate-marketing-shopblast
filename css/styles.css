@@ -37,3 +37,16 @@ body {
   display: inline-block;
   text-decoration: none;
 }
+.delete-btn {
+  margin-top: 10px;
+  background: red;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.delete-btn:hover {
+  background: black;
+}
