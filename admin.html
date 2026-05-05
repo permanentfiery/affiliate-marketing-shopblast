@@ -56,6 +56,65 @@ button {
 </div>
 
 <div id="adminPanel" class="box" style="display:none;">
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StealMyFinds Admin</title>
+<link rel="stylesheet" href="css/styles.css">
+
+<style>
+body {
+  font-family: Arial;
+  padding: 20px;
+  background: #fafafa;
+}
+
+.box {
+  max-width: 400px;
+  margin: auto;
+  border: 3px solid black;
+  padding: 20px;
+  background: white;
+}
+
+input, select {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+button {
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background: black;
+  color: yellow;
+  font-weight: bold;
+}
+
+.logout {
+  background: red;
+  color: white;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>STEALMYFINDS ADMIN</h1>
+
+<div id="loginBox" class="box">
+  <h3>Login</h3>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="adminPanel" class="box" style="display:none;">
   <h3>Add Product</h3>
 
   <input id="name" placeholder="Product Name">
@@ -63,8 +122,13 @@ button {
   <input id="link" placeholder="Affiliate Link">
   <input id="image" placeholder="Image URL">
 
-  <button onclick="addProduct()">Add Product</button>
+  <!-- 🔥 DEAL TOGGLE -->
+  <select id="deal">
+    <option value="no">Normal Product</option>
+    <option value="yes">🔥 Deal of the Day</option>
+  </select>
 
+  <button onclick="addProduct()">Add Product</button>
   <button class="logout" onclick="logout()">Logout</button>
 </div>
 
@@ -72,3 +136,5 @@ button {
 
 </body>
 </html>
+
+
