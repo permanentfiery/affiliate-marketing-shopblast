@@ -7,7 +7,7 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// 🔐 LOGIN
+// LOGIN
 window.login = async function () {
   const email = document.getElementById("email").value.trim();
   const pass = document.getElementById("password").value;
@@ -24,13 +24,13 @@ window.login = async function () {
   }
 };
 
-// 🔐 LOGOUT
+// LOGOUT
 window.logout = async function () {
   await signOut(auth);
   location.reload();
 };
 
-// 🔄 AUTH STATE
+// AUTH STATE
 onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById("adminPanel").style.display = "block";
@@ -41,7 +41,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// ➕ ADD PRODUCT
+// ADD PRODUCT (🔥 includes deal flag)
 window.addProduct = async function () {
   if (!auth.currentUser) {
     alert("Not authorized");
@@ -52,6 +52,7 @@ window.addProduct = async function () {
   const priceInput = document.getElementById("price").value;
   const link = document.getElementById("link").value.trim();
   const image = document.getElementById("image").value.trim();
+  const deal = document.getElementById("deal").value === "yes";
 
   if (!name || !priceInput || !link) {
     alert("Fill all required fields");
@@ -65,7 +66,8 @@ window.addProduct = async function () {
       name,
       price,
       link,
-      image: image || ""
+      image: image || "",
+      deal
     });
 
     alert("Product added");
@@ -75,6 +77,7 @@ window.addProduct = async function () {
     document.getElementById("price").value = "";
     document.getElementById("link").value = "";
     document.getElementById("image").value = "";
+    document.getElementById("deal").value = "no";
 
   } catch (err) {
     alert("Error: " + err.message);
