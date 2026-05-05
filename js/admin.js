@@ -29,8 +29,14 @@ window.addProduct = async function () {
   const name = document.getElementById("name").value;
   const price = Math.round(parseFloat(document.getElementById("price").value) * 100);
   const link = document.getElementById("link").value;
+  const image = document.getElementById("image").value;
 
-  await addToDB({ name, price, link });
+  await addToDB({
+    name,
+    price,
+    link,
+    image
+  });
 
-  alert("Product added");
+  alert("Product added successfully");
 };
