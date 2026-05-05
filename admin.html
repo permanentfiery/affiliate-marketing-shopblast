@@ -111,7 +111,7 @@ button {
   <h3>Login</h3>
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
+  <button id="loginBtn">Login</button>
 </div>
 
 <div id="adminPanel" class="box" style="display:none;">
@@ -128,8 +128,8 @@ button {
     <option value="yes">🔥 Deal of the Day</option>
   </select>
 
-  <button onclick="addProduct()">Add Product</button>
-  <button class="logout" onclick="logout()">Logout</button>
+  <button id="addBtn">Add Product</button>
+  <button id="logoutBtn">Logout</button>
 </div>
 
 <script type="module" src="js/admin.js"></script>
