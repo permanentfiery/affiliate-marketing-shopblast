@@ -3,64 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StealMyFinds Admin Panel</title>
-<link rel="stylesheet" href="css/styles.css">
-<style>
-body {
-  font-family: Arial;
-  padding: 20px;
-  background: #fafafa;
-}
-
-.box {
-  max-width: 400px;
-  margin: auto;
-  border: 3px solid black;
-  padding: 20px;
-  background: white;
-}
-
-input {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-}
-
-button {
-  padding: 10px;
-  cursor: pointer;
-  border: none;
-  background: black;
-  color: yellow;
-  font-weight: bold;
-}
-
-.logout {
-  background: red;
-  color: white;
-  margin-top: 10px;
-}
-</style>
-</head>
-
-<body>
-
-<h1>ADMIN PANEL</h1>
-
-<div id="loginBox" class="box">
-  <h3>Login</h3>
-  <input id="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
-</div>
-
-<div id="adminPanel" class="box" style="display:none;">
- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StealMyFinds Admin</title>
 <link rel="stylesheet" href="css/styles.css">
 
@@ -72,7 +14,7 @@ body {
 }
 
 .box {
-  max-width: 400px;
+  max-width: 420px;
   margin: auto;
   border: 3px solid black;
   padding: 20px;
@@ -93,12 +35,12 @@ button {
   background: black;
   color: yellow;
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .logout {
   background: red;
   color: white;
-  margin-top: 10px;
 }
 </style>
 </head>
@@ -122,19 +64,15 @@ button {
   <input id="link" placeholder="Affiliate Link">
   <input id="image" placeholder="Image URL">
 
-  <!-- 🔥 DEAL TOGGLE -->
   <select id="deal">
     <option value="no">Normal Product</option>
     <option value="yes">🔥 Deal of the Day</option>
   </select>
 
   <button id="addBtn">Add Product</button>
-  <button id="logoutBtn">Logout</button>
+  <button id="logoutBtn" class="logout">Logout</button>
 </div>
 
-<script type="module" src="js/admin.js"></script>
-
+<script type="module" src="./js/admin.js"></script>
 </body>
 </html>
-
-
