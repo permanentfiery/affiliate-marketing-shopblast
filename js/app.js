@@ -12,38 +12,41 @@ async function loadProducts() {
   render(products);
 }
 
-// 🔥 DEAL FUNCTION (FIXED)
+// 🔥 DEAL SECTION (NOW SHOWS MULTIPLE DEALS)
 function renderDeal(products) {
   const el = document.getElementById("dealSection");
-
   if (!el) return;
 
-  // strict boolean check
-  const deal = products.find(p => p.deal === true);
+  const deals = products.filter(p => p.deal === true);
 
-  console.log("DEAL FOUND:", deal);
+  console.log("ALL DEALS:", deals);
 
-  if (!deal) {
+  if (deals.length === 0) {
     el.innerHTML = "";
     return;
   }
 
-  const img = deal.image || "https://via.placeholder.com/100";
-
   el.innerHTML = `
     <div class="deal">
-      <h2>🔥 DEAL OF THE DAY</h2>
-      <img src="${img}">
-      <h3>${deal.name}</h3>
-      <p>₹${(deal.price / 100).toFixed(2)}</p>
-      <a href="${deal.link}" target="_blank" class="buy">
-        GRAB DEAL →
-      </a>
+      <h2>🔥 DEALS OF THE DAY</h2>
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
+        ${deals.map(p => {
+          const img = p.image || "https://via.placeholder.com/100";
+          return `
+            <div style="border:2px solid black; padding:10px; background:white;">
+              <img src="${img}" style="width:100px;height:100px;object-fit:cover;">
+              <h4>${p.name}</h4>
+              <p>₹${(p.price / 100).toFixed(2)}</p>
+              <a href="${p.link}" target="_blank" class="buy">GRAB</a>
+            </div>
+          `;
+        }).join("")}
+      </div>
     </div>
   `;
 }
 
-// PRODUCT GRID
+// 🛍 PRODUCT GRID
 function render(list) {
   const grid = document.getElementById("productGrid");
 
@@ -61,7 +64,7 @@ function render(list) {
   }).join("");
 }
 
-// SEARCH
+// 🔍 SEARCH
 document.getElementById("searchInput").addEventListener("input", e => {
   const q = e.target.value.toLowerCase();
   const filtered = products.filter(p =>
