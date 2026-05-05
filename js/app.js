@@ -5,16 +5,23 @@ let products = [];
 
 async function loadProducts() {
   products = await getProducts();
+
+  console.log("ALL PRODUCTS:", products);
+
   renderDeal(products);
   render(products);
 }
 
-// 🔥 DEAL OF THE DAY
+// 🔥 DEAL FUNCTION (FIXED)
 function renderDeal(products) {
-  const deal = products.find(p => p.deal);
   const el = document.getElementById("dealSection");
 
   if (!el) return;
+
+  // strict boolean check
+  const deal = products.find(p => p.deal === true);
+
+  console.log("DEAL FOUND:", deal);
 
   if (!deal) {
     el.innerHTML = "";
@@ -36,7 +43,7 @@ function renderDeal(products) {
   `;
 }
 
-// PRODUCTS
+// PRODUCT GRID
 function render(list) {
   const grid = document.getElementById("productGrid");
 
@@ -49,12 +56,6 @@ function render(list) {
         <h3>${p.name}</h3>
         <p>₹${(p.price / 100).toFixed(2)}</p>
         <a href="${p.link}" target="_blank" class="buy">BUY</a>
-
-        ${
-          auth.currentUser && window.location.pathname.includes("admin")
-            ? `<button onclick="deleteProduct('${p.id}')" class="delete-btn">DELETE</button>`
-            : ""
-        }
       </div>
     `;
   }).join("");
@@ -68,19 +69,5 @@ document.getElementById("searchInput").addEventListener("input", e => {
   );
   render(filtered);
 });
-
-// DELETE
-window.deleteProduct = async function(id) {
-  if (!auth.currentUser) {
-    alert("Not authorized");
-    return;
-  }
-
-  const confirmDelete = confirm("Delete this product?");
-  if (!confirmDelete) return;
-
-  await deleteFromDB(id);
-  loadProducts();
-};
 
 loadProducts();
