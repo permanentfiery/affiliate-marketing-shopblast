@@ -3,40 +3,80 @@ import { addProduct as addToDB } from "./db.js";
 
 import {
   signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+// 🔐 LOGIN
 window.login = async function () {
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const pass = document.getElementById("password").value;
 
-  await signInWithEmailAndPassword(auth, email, pass);
+  if (!email || !pass) {
+    alert("Enter email and password");
+    return;
+  }
+
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch (err) {
+    alert("Login failed: " + err.message);
+  }
 };
 
-onAuthStateChanged(auth, user => {
+// 🔐 LOGOUT
+window.logout = async function () {
+  await signOut(auth);
+  location.reload();
+};
+
+// 🔄 AUTH STATE
+onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById("adminPanel").style.display = "block";
     document.getElementById("loginBox").style.display = "none";
+  } else {
+    document.getElementById("adminPanel").style.display = "none";
+    document.getElementById("loginBox").style.display = "block";
   }
 });
 
+// ➕ ADD PRODUCT
 window.addProduct = async function () {
   if (!auth.currentUser) {
     alert("Not authorized");
     return;
   }
 
-  const name = document.getElementById("name").value;
-  const price = Math.round(parseFloat(document.getElementById("price").value) * 100);
-  const link = document.getElementById("link").value;
-  const image = document.getElementById("image").value;
+  const name = document.getElementById("name").value.trim();
+  const priceInput = document.getElementById("price").value;
+  const link = document.getElementById("link").value.trim();
+  const image = document.getElementById("image").value.trim();
 
-  await addToDB({
-    name,
-    price,
-    link,
-    image
-  });
+  if (!name || !priceInput || !link) {
+    alert("Fill all required fields");
+    return;
+  }
 
-  alert("Product added successfully");
+  const price = Math.round(parseFloat(priceInput) * 100);
+
+  try {
+    await addToDB({
+      name,
+      price,
+      link,
+      image: image || ""
+    });
+
+    alert("Product added");
+
+    // Clear form
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("link").value = "";
+    document.getElementById("image").value = "";
+
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
 };
