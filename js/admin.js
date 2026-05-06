@@ -1,5 +1,11 @@
 import { auth } from "./firebase.js";
-import { addProduct as addToDB } from "./db.js";
+
+import {
+  getProducts,
+  addProduct,
+  updateProduct,
+  deleteProduct
+} from "./db.js";
 
 import {
   signInWithEmailAndPassword,
@@ -7,11 +13,14 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+let editingId = null;
+
 document.addEventListener("DOMContentLoaded", () => {
 
+  // ELEMENTS
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
-  const addBtn = document.getElementById("addBtn");
+  const saveBtn = document.getElementById("saveBtn");
 
   const emailEl = document.getElementById("email");
   const passEl = document.getElementById("password");
@@ -20,83 +29,177 @@ document.addEventListener("DOMContentLoaded", () => {
   const priceEl = document.getElementById("price");
   const linkEl = document.getElementById("link");
   const imageEl = document.getElementById("image");
+  const descEl = document.getElementById("description");
   const dealEl = document.getElementById("deal");
 
   const loginBox = document.getElementById("loginBox");
   const adminPanel = document.getElementById("adminPanel");
 
+  const productList = document.getElementById("productList");
+
   // LOGIN
   loginBtn.addEventListener("click", async () => {
+
     const email = emailEl.value.trim();
     const pass = passEl.value.trim();
 
-    if (!email || !pass) {
-      alert("Enter email and password");
-      return;
-    }
-
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-      alert("Login successful");
     } catch (err) {
       alert(err.message);
     }
+
   });
 
   // LOGOUT
   logoutBtn.addEventListener("click", async () => {
+
     await signOut(auth);
+
     location.reload();
+
   });
 
-  // ADD PRODUCT (FIXED DEAL BOOLEAN)
-  addBtn.addEventListener("click", async () => {
-    if (!auth.currentUser) {
-      alert("Not authorized");
-      return;
+  // AUTH
+  onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+
+      loginBox.style.display = "none";
+      adminPanel.style.display = "block";
+
+      loadProducts();
+
+    } else {
+
+      loginBox.style.display = "block";
+      adminPanel.style.display = "none";
+
     }
 
-    const name = nameEl.value.trim();
-    const priceInput = priceEl.value;
-    const link = linkEl.value.trim();
-    const image = imageEl.value.trim();
+  });
 
-    // 🔥 FORCE BOOLEAN
-    const deal = dealEl.value === "yes";
+  // SAVE PRODUCT
+  saveBtn.addEventListener("click", async () => {
 
-    if (!name || !priceInput || !link) {
-      alert("Fill all required fields");
-      return;
+    const product = {
+      name: nameEl.value.trim(),
+      price: Math.round(parseFloat(priceEl.value) * 100),
+      link: linkEl.value.trim(),
+      image: imageEl.value.trim(),
+      description: descEl.value.trim(),
+      deal: dealEl.value === "yes"
+    };
+
+    if (editingId) {
+
+      await updateProduct(editingId, product);
+
+      alert("Product updated");
+
+      editingId = null;
+
+    } else {
+
+      await addProduct(product);
+
+      alert("Product added");
+
     }
 
-    const price = Math.round(parseFloat(priceInput) * 100);
+    clearForm();
 
-    await addToDB({
-      name,
-      price,
-      link,
-      image,
-      deal
+    loadProducts();
+
+  });
+
+  // LOAD PRODUCTS
+  async function loadProducts() {
+
+    const products = await getProducts();
+
+    productList.innerHTML = products.map(p => {
+
+      return `
+        <div class="product-item">
+
+          <h3>${p.name}</h3>
+
+          <p>
+            ₹${(p.price / 100).toFixed(2)}
+          </p>
+
+          <button class="editBtn"
+                  data-id="${p.id}">
+            Edit
+          </button>
+
+          <button class="deleteBtn"
+                  data-id="${p.id}"
+                  style="background:red;color:white;">
+            Delete
+          </button>
+
+        </div>
+      `;
+
+    }).join("");
+
+    // EDIT
+    document.querySelectorAll(".editBtn").forEach(btn => {
+
+      btn.addEventListener("click", async () => {
+
+        const id = btn.dataset.id;
+
+        const products = await getProducts();
+
+        const p = products.find(x => x.id === id);
+
+        if (!p) return;
+
+        editingId = id;
+
+        nameEl.value = p.name || "";
+        priceEl.value = (p.price / 100).toFixed(2);
+        linkEl.value = p.link || "";
+        imageEl.value = p.image || "";
+        descEl.value = p.description || "";
+        dealEl.value = p.deal ? "yes" : "no";
+
+      });
+
     });
 
-    alert("Product added");
+    // DELETE
+    document.querySelectorAll(".deleteBtn").forEach(btn => {
+
+      btn.addEventListener("click", async () => {
+
+        const id = btn.dataset.id;
+
+        if (!confirm("Delete product?")) return;
+
+        await deleteProduct(id);
+
+        loadProducts();
+
+      });
+
+    });
+
+  }
+
+  // CLEAR FORM
+  function clearForm() {
 
     nameEl.value = "";
     priceEl.value = "";
     linkEl.value = "";
     imageEl.value = "";
+    descEl.value = "";
     dealEl.value = "no";
-  });
 
-  // AUTH STATE
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      adminPanel.style.display = "block";
-      loginBox.style.display = "none";
-    } else {
-      adminPanel.style.display = "none";
-      loginBox.style.display = "block";
-    }
-  });
+  }
 
 });
