@@ -109,5 +109,13 @@ document.getElementById("searchInput").addEventListener("input", e => {
 
   render(filtered);
 });
+document.getElementById("closeModal").onclick = () => {
+  document.getElementById("productModal").classList.add("hidden");
+};
 
+window.onclick = (e) => {
+  if (e.target.id === "productModal") {
+    document.getElementById("productModal").classList.add("hidden");
+  }
+};
 loadProducts();
