@@ -1,16 +1,20 @@
 import { getProducts } from "./db.js";
 
 let products = [];
+let activeCategory = "All";
 
 async function loadProducts() {
+
   products = await getProducts();
 
   renderDeal(products);
   render(products);
+
 }
 
 // 🔥 DEAL SECTION
 function renderDeal(products) {
+
   const el = document.getElementById("dealSection");
 
   if (!el) return;
@@ -18,8 +22,11 @@ function renderDeal(products) {
   const deals = products.filter(p => p.deal === true);
 
   if (deals.length === 0) {
+
     el.innerHTML = "";
+
     return;
+
   }
 
   el.innerHTML = `
@@ -51,6 +58,10 @@ function renderDeal(products) {
                    style="width:100px;height:100px;">
 
               <h4>${name}</h4>
+
+              <p>
+                <b>${p.category || "General"}</b>
+              </p>
 
               <p>
                 <b>₹${price}</b>
@@ -91,6 +102,7 @@ function renderDeal(products) {
 
 // 🛍 PRODUCT GRID
 function render(list) {
+
   const grid = document.getElementById("productGrid");
 
   grid.innerHTML = list.map(p => {
@@ -108,6 +120,10 @@ function render(list) {
         <img src="https://via.placeholder.com/300">
 
         <h3>${p.name || "No Name"}</h3>
+
+        <p>
+          <b>${p.category || "General"}</b>
+        </p>
 
         <p>₹${price}</p>
 
@@ -166,6 +182,7 @@ function openModal(product) {
 
   document.getElementById("modalLink").href =
     product.link || "#";
+
 }
 
 // ❌ CLOSE MODAL
@@ -174,6 +191,7 @@ document.getElementById("closeModal")
 
     document.getElementById("productModal")
       .classList.add("hidden");
+
 });
 
 // CLOSE ON BACKDROP CLICK
@@ -194,12 +212,50 @@ document.getElementById("searchInput")
 
     const q = e.target.value.toLowerCase();
 
-    const filtered = products.filter(p =>
-      (p.name || "").toLowerCase().includes(q)
+    let filtered = products.filter(p =>
+      (p.name || "")
+        .toLowerCase()
+        .includes(q)
     );
+
+    if (activeCategory !== "All") {
+
+      filtered = filtered.filter(p =>
+        p.category === activeCategory
+      );
+
+    }
+
+    render(filtered);
+
+});
+
+// 🧭 CATEGORY FILTER
+document.querySelectorAll(".tab").forEach(tab => {
+
+  tab.addEventListener("click", () => {
+
+    document.querySelectorAll(".tab")
+      .forEach(t => t.classList.remove("active"));
+
+    tab.classList.add("active");
+
+    activeCategory = tab.dataset.category;
+
+    let filtered = [...products];
+
+    if (activeCategory !== "All") {
+
+      filtered = filtered.filter(p =>
+        p.category === activeCategory
+      );
+
+    }
 
     render(filtered);
 
   });
+
+});
 
 loadProducts();
