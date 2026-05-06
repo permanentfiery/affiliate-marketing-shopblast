@@ -67,11 +67,18 @@ function render(list) {
     }
 
     return `
-  <div class="card">
+  <div class="card" onclick='openModal(${JSON.stringify(p)})'>
     <img src="https://via.placeholder.com/300">
+
     <h3>${p.name || "No Name"}</h3>
+
     <p>₹${price}</p>
-    <a href="${p.link || '#'}" target="_blank" class="buy">BUY</a>
+
+    <a href="${p.link || '#'}"
+       target="_blank"
+       class="buy">
+       BUY
+    </a>
   </div>
 `;
   }).join("");
