@@ -11,7 +11,7 @@ async function loadProducts() {
   render(products);
 }
 
-// 🔥 DEAL SECTION (MULTIPLE DEALS + CLEAN DISPLAY)
+// 🔥 DEAL SECTION (FINAL FIX)
 function renderDeal(products) {
   const el = document.getElementById("dealSection");
   if (!el) return;
@@ -35,15 +35,13 @@ function renderDeal(products) {
         flex-wrap:wrap;
       ">
         ${deals.map(p => {
-          // ignore images for now
-          const img = "https://via.placeholder.com/100";
 
-          // FIX PRICE (supports both rupees + paise)
+          const name = p.name || "No Name";
+
+          // ✅ CONSISTENT PRICE HANDLING (always paise → rupees)
           let price = "0.00";
           if (typeof p.price === "number") {
-            price = p.price > 1000
-              ? (p.price / 100).toFixed(2)  // paise
-              : p.price.toFixed(2);         // rupees
+            price = (p.price / 100).toFixed(2);
           }
 
           return `
@@ -51,19 +49,17 @@ function renderDeal(products) {
               border:2px solid black;
               padding:10px;
               background:white;
-              width:160px;
+              width:180px;
               text-align:center;
             ">
-              <img src="${img}" style="width:100px;height:100px;">
+              <img src="https://via.placeholder.com/100"
+                   style="width:100px;height:100px;">
 
-              <h4 style="
-                margin:10px 0;
-                font-size:14px;
-              ">
-                ${p.name || "No Name"}
+              <h4 style="margin:10px 0;">
+                ${name}
               </h4>
 
-              <p style="margin:6px 0;">
+              <p style="font-weight:bold;">
                 ₹${price}
               </p>
 
@@ -78,7 +74,7 @@ function renderDeal(products) {
   `;
 }
 
-// 🛍 PRODUCT GRID (NORMAL SECTION)
+// 🛍 NORMAL PRODUCT GRID
 function render(list) {
   const grid = document.getElementById("productGrid");
 
@@ -87,9 +83,7 @@ function render(list) {
 
     let price = "0.00";
     if (typeof p.price === "number") {
-      price = p.price > 1000
-        ? (p.price / 100).toFixed(2)
-        : p.price.toFixed(2);
+      price = (p.price / 100).toFixed(2);
     }
 
     return `
