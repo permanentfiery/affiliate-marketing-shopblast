@@ -133,12 +133,23 @@ body {
   cursor: pointer;
   font-weight: bold;
 
+  overflow: hidden;
+  white-space: nowrap;
+
+  width: 110px;
+
   transition:
+    width 0.25s ease,
     transform 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
+/* 🔥 EXPAND ON HOVER */
 .tab:hover {
+  width: 230px;
+
   transform: translate(-3px, -3px);
 
   box-shadow:
@@ -216,27 +227,27 @@ body {
 
   <button class="tab"
           data-category="Electronics & Gadgets">
-    Electronics
+    Electronics & Gadgets
   </button>
 
   <button class="tab"
           data-category="Fashion & Beauty">
-    Fashion
+    Fashion & Beauty
   </button>
 
   <button class="tab"
           data-category="Home & Kitchen">
-    Home
+    Home & Kitchen
   </button>
 
   <button class="tab"
           data-category="Health & Fitness">
-    Fitness
+    Health & Fitness
   </button>
 
   <button class="tab"
           data-category="Books & Courses">
-    Books
+    Books & Courses
   </button>
 
 </div>
