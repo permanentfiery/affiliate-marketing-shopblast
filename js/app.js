@@ -5,20 +5,16 @@ let products = [];
 async function loadProducts() {
   products = await getProducts();
 
-  console.log("ALL PRODUCTS:", products);
-
   renderDeal(products);
   render(products);
 }
 
-// 🔥 DEAL SECTION (FINAL FIX)
+// 🔥 DEAL SECTION
 function renderDeal(products) {
   const el = document.getElementById("dealSection");
   if (!el) return;
 
   const deals = products.filter(p => p.deal === true);
-
-  console.log("ALL DEALS:", deals);
 
   if (deals.length === 0) {
     el.innerHTML = "";
@@ -29,39 +25,24 @@ function renderDeal(products) {
     <div class="deal">
       <h2>🔥 DEALS OF THE DAY</h2>
 
-      <div style="
-        display:flex;
-        gap:20px;
-        flex-wrap:wrap;
-      ">
+      <div style="display:flex; gap:20px; flex-wrap:wrap;">
         ${deals.map(p => {
 
           const name = p.name || "No Name";
 
-          // ✅ CONSISTENT PRICE HANDLING (always paise → rupees)
           let price = "0.00";
           if (typeof p.price === "number") {
             price = (p.price / 100).toFixed(2);
           }
 
           return `
-            <div style="
-              border:2px solid black;
-              padding:10px;
-              background:white;
-              width:180px;
-              text-align:center;
-            ">
+            <div class="deal-card">
               <img src="https://via.placeholder.com/100"
                    style="width:100px;height:100px;">
 
-              <h4 style="margin:10px 0;">
-                ${name}
-              </h4>
+              <h4>${name}</h4>
 
-              <p style="font-weight:bold;">
-                ₹${price}
-              </p>
+              <p><b>₹${price}</b></p>
 
               <a href="${p.link || '#'}" target="_blank" class="buy">
                 GRAB
@@ -74,12 +55,11 @@ function renderDeal(products) {
   `;
 }
 
-// 🛍 NORMAL PRODUCT GRID
+// 🛍 PRODUCT GRID
 function render(list) {
   const grid = document.getElementById("productGrid");
 
   grid.innerHTML = list.map(p => {
-    const img = "https://via.placeholder.com/300";
 
     let price = "0.00";
     if (typeof p.price === "number") {
@@ -88,7 +68,7 @@ function render(list) {
 
     return `
       <div class="card">
-        <img src="${img}">
+        <img src="https://via.placeholder.com/300">
         <h3>${p.name || "No Name"}</h3>
         <p>₹${price}</p>
         <a href="${p.link || '#'}" target="_blank" class="buy">BUY</a>
