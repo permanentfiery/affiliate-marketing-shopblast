@@ -12,6 +12,7 @@ async function loadProducts() {
 // 🔥 DEAL SECTION
 function renderDeal(products) {
   const el = document.getElementById("dealSection");
+
   if (!el) return;
 
   const deals = products.filter(p => p.deal === true);
@@ -23,27 +24,37 @@ function renderDeal(products) {
 
   el.innerHTML = `
     <div class="deal">
+
       <h2>🔥 DEALS OF THE DAY</h2>
 
-      <div style="display:flex; gap:20px; flex-wrap:wrap;">
+      <div style="
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+      ">
+
         ${deals.map(p => {
 
           const name = p.name || "No Name";
 
           let price = "0.00";
+
           if (typeof p.price === "number") {
             price = (p.price / 100).toFixed(2);
           }
 
           return `
-            <div class="deal-card">
+            <div class="deal-card"
+                 data-id="${p.id}">
 
               <img src="https://via.placeholder.com/100"
                    style="width:100px;height:100px;">
 
               <h4>${name}</h4>
 
-              <p><b>₹${price}</b></p>
+              <p>
+                <b>₹${price}</b>
+              </p>
 
               <a href="${p.link || '#'}"
                  target="_blank"
@@ -54,9 +65,28 @@ function renderDeal(products) {
             </div>
           `;
         }).join("")}
+
       </div>
     </div>
   `;
+
+  // 🪟 DEAL CARD CLICK
+  document.querySelectorAll(".deal-card").forEach(card => {
+
+    card.addEventListener("click", () => {
+
+      const id = card.dataset.id;
+
+      const product = products.find(p => p.id === id);
+
+      if (product) {
+        openModal(product);
+      }
+
+    });
+
+  });
+
 }
 
 // 🛍 PRODUCT GRID
@@ -72,7 +102,8 @@ function render(list) {
     }
 
     return `
-      <div class="card" data-id="${p.id}">
+      <div class="card"
+           data-id="${p.id}">
 
         <img src="https://via.placeholder.com/300">
 
@@ -90,8 +121,8 @@ function render(list) {
     `;
   }).join("");
 
-   // 🪟 DEAL CARD CLICK
-  document.querySelectorAll(".deal-card").forEach(card => {
+  // 🪟 PRODUCT CARD CLICK
+  document.querySelectorAll(".card").forEach(card => {
 
     card.addEventListener("click", () => {
 
@@ -106,7 +137,10 @@ function render(list) {
     });
 
   });
-}// 🪟 OPEN MODAL
+
+}
+
+// 🪟 OPEN MODAL
 function openModal(product) {
 
   document.getElementById("productModal")
@@ -144,10 +178,14 @@ document.getElementById("closeModal")
 
 // CLOSE ON BACKDROP CLICK
 window.addEventListener("click", (e) => {
+
   if (e.target.id === "productModal") {
+
     document.getElementById("productModal")
       .classList.add("hidden");
+
   }
+
 });
 
 // 🔍 SEARCH
@@ -161,6 +199,7 @@ document.getElementById("searchInput")
     );
 
     render(filtered);
-});
+
+  });
 
 loadProducts();
