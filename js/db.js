@@ -1,40 +1,61 @@
 import { db } from "./firebase.js";
+
 import {
   collection,
   getDocs,
   addDoc,
   deleteDoc,
+  updateDoc,
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// 📦 PRODUCTS COLLECTION
 const col = collection(db, "products");
 
-// ✅ FIXED: Proper mapping
+// 🔍 GET PRODUCTS
 export async function getProducts() {
+
   const snap = await getDocs(col);
 
   return snap.docs.map(d => {
-    const data = d.data();
 
-    console.log("RAW DOC:", data); // DEBUG
+    const data = d.data();
 
     return {
       id: d.id,
-      name: data.name,
-      price: data.price,
-      link: data.link,
-      image: data.image,
-      deal: data.deal
+      name: data.name || "",
+      price: data.price || 0,
+      link: data.link || "",
+      image: data.image || "",
+      description: data.description || "",
+      deal: data.deal || false
     };
+
   });
+
 }
 
-// ADD
-export async function addProduct(p) {
-  return await addDoc(col, p);
+// ➕ ADD PRODUCT
+export async function addProduct(product) {
+
+  return await addDoc(col, product);
+
 }
 
-// DELETE
+// ✏️ UPDATE PRODUCT
+export async function updateProduct(id, data) {
+
+  const ref = doc(db, "products", id);
+
+  await updateDoc(ref, data);
+
+}
+
+// ❌ DELETE PRODUCT
 export async function deleteProduct(id) {
-  return await deleteDoc(doc(db, "products", id));
+
+  const ref = doc(db, "products", id);
+
+  await deleteDoc(ref);
+
 }
