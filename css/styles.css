@@ -93,3 +93,39 @@ body {
   transform: translate(-2px, -2px);
   box-shadow: 2px 2px 0px black;
 }
+.buy {
+  background: black;
+  color: yellow;
+  padding: 10px 14px;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: bold;
+  border: 2px solid black;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+
+  box-shadow: 0px 0px 0px black;
+}
+
+/* 🔥 HOVER POP EFFECT */
+.buy:hover {
+  transform: translate(-4px, -4px) scale(1.05);
+
+  box-shadow:
+    4px 4px 0px black;
+
+  background: yellow;
+  color: black;
+}
+
+/* 👇 CLICK FEEDBACK */
+.buy:active {
+  transform: translate(-1px, -1px) scale(0.98);
+
+  box-shadow:
+    1px 1px 0px black;
+}
