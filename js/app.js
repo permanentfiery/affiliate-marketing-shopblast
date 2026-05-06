@@ -67,13 +67,13 @@ function render(list) {
     }
 
     return `
-      <div class="card">
-        <img src="https://via.placeholder.com/300">
-        <h3>${p.name || "No Name"}</h3>
-        <p>₹${price}</p>
-        <a href="${p.link || '#'}" target="_blank" class="buy">BUY</a>
-      </div>
-    `;
+  <div class="card">
+    <img src="https://via.placeholder.com/300">
+    <h3>${p.name || "No Name"}</h3>
+    <p>₹${price}</p>
+    <a href="${p.link || '#'}" target="_blank" class="buy">BUY</a>
+  </div>
+`;
   }).join("");
 }
 
