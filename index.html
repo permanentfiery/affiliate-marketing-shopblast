@@ -133,10 +133,14 @@ body {
   cursor: pointer;
   font-weight: bold;
 
-  overflow: hidden;
-  white-space: nowrap;
+  width: 140px;
+  height: 46px;
 
-  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
 
   transition:
     width 0.25s ease,
@@ -146,9 +150,24 @@ body {
     color 0.15s ease;
 }
 
-/* 🔥 EXPAND ON HOVER */
+/* text wrapper */
+.tab span {
+  display: inline-block;
+
+  white-space: nowrap;
+
+  transform: translateX(-15px);
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+
+  opacity: 0.75;
+}
+
+/* 🔥 HOVER */
 .tab:hover {
-  width: 230px;
+  width: 240px;
 
   transform: translate(-3px, -3px);
 
@@ -156,11 +175,16 @@ body {
     3px 3px 0 black;
 }
 
+.tab:hover span {
+  transform: translateX(0px);
+
+  opacity: 1;
+}
+
 .tab.active {
   background: black;
   color: yellow;
 }
-
 /* 🪟 MODAL */
 .modal {
   position: fixed;
