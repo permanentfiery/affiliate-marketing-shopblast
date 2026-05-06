@@ -9,15 +9,32 @@ import {
 
 const col = collection(db, "products");
 
+// ✅ FIXED: Proper mapping
 export async function getProducts() {
   const snap = await getDocs(col);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  return snap.docs.map(d => {
+    const data = d.data();
+
+    console.log("RAW DOC:", data); // DEBUG
+
+    return {
+      id: d.id,
+      name: data.name,
+      price: data.price,
+      link: data.link,
+      image: data.image,
+      deal: data.deal
+    };
+  });
 }
 
-export async function addProduct(product) {
-  await addDoc(col, product);
+// ADD
+export async function addProduct(p) {
+  return await addDoc(col, p);
 }
 
+// DELETE
 export async function deleteProduct(id) {
-  await deleteDoc(doc(db, "products", id));
+  return await deleteDoc(doc(db, "products", id));
 }
