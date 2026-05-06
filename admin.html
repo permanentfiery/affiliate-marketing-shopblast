@@ -21,7 +21,8 @@ body {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -78,7 +79,7 @@ button:hover {
     <input id="name" placeholder="Product Name">
 
     <input id="price"
-           placeholder="Price in rupees (e.g. 999.99)">
+           placeholder="Price in rupees">
 
     <input id="link"
            placeholder="Affiliate Link">
@@ -87,12 +88,44 @@ button:hover {
            placeholder="Image URL">
 
     <textarea id="description"
-              placeholder="Description"
-              style="width:100%;height:100px;margin-bottom:10px;"></textarea>
+              placeholder="Description"></textarea>
 
+    <!-- 🧭 CATEGORY -->
+    <select id="category">
+
+      <option value="Electronics & Gadgets">
+        Electronics & Gadgets
+      </option>
+
+      <option value="Fashion & Beauty">
+        Fashion & Beauty
+      </option>
+
+      <option value="Home & Kitchen">
+        Home & Kitchen
+      </option>
+
+      <option value="Health & Fitness">
+        Health & Fitness
+      </option>
+
+      <option value="Books & Courses">
+        Books & Courses
+      </option>
+
+    </select>
+
+    <!-- 🔥 DEAL -->
     <select id="deal">
-      <option value="no">Normal Product</option>
-      <option value="yes">🔥 Deal Product</option>
+
+      <option value="no">
+        Normal Product
+      </option>
+
+      <option value="yes">
+        🔥 Deal Product
+      </option>
+
     </select>
 
     <button id="saveBtn">
