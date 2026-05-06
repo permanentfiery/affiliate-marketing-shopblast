@@ -37,6 +37,7 @@ function renderDeal(products) {
 
           return `
             <div class="deal-card">
+
               <img src="https://via.placeholder.com/100"
                    style="width:100px;height:100px;">
 
@@ -44,9 +45,12 @@ function renderDeal(products) {
 
               <p><b>₹${price}</b></p>
 
-              <a href="${p.link || '#'}" target="_blank" class="buy">
-                GRAB
+              <a href="${p.link || '#'}"
+                 target="_blank"
+                 class="buy">
+                 GRAB
               </a>
+
             </div>
           `;
         }).join("")}
@@ -67,38 +71,59 @@ function render(list) {
     }
 
     return `
-  <div class="card" onclick='openModal(${JSON.stringify(p)})'>
-    <img src="https://via.placeholder.com/300">
+      <div class="card"
+           data-id="${p.id}">
 
-    <h3>${p.name || "No Name"}</h3>
+        <img src="https://via.placeholder.com/300">
 
-    <p>₹${price}</p>
+        <h3>${p.name || "No Name"}</h3>
 
-    <a href="${p.link || '#'}"
-       target="_blank"
-       class="buy">
-       BUY
-    </a>
-  </div>
-`;
+        <p>₹${price}</p>
+
+        <a href="${p.link || '#'}"
+           target="_blank"
+           class="buy">
+           BUY
+        </a>
+
+      </div>
+    `;
   }).join("");
+
+  // 🪟 ADD CLICK HANDLERS
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", () => {
+      const id = card.dataset.id;
+
+      const product = products.find(p => p.id === id);
+
+      if (product) {
+        openModal(product);
+      }
+    });
+  });
 }
 
-
+// 🪟 OPEN MODAL
 function openModal(product) {
-  document.getElementById("productModal").classList.remove("hidden");
+
+  document.getElementById("productModal")
+    .classList.remove("hidden");
 
   document.getElementById("modalImg").src =
-    product.image || "https://via.placeholder.com/300";
+    "https://via.placeholder.com/300";
 
   document.getElementById("modalName").textContent =
     product.name || "No Name";
 
-  const price = typeof product.price === "number"
-    ? (product.price / 100).toFixed(2)
-    : "0.00";
+  let price = "0.00";
 
-  document.getElementById("modalPrice").textContent = `₹${price}`;
+  if (typeof product.price === "number") {
+    price = (product.price / 100).toFixed(2);
+  }
+
+  document.getElementById("modalPrice").textContent =
+    `₹${price}`;
 
   document.getElementById("modalDesc").textContent =
     product.description || "No description available.";
@@ -106,23 +131,34 @@ function openModal(product) {
   document.getElementById("modalLink").href =
     product.link || "#";
 }
-// 🔍 SEARCH
-document.getElementById("searchInput").addEventListener("input", e => {
-  const q = e.target.value.toLowerCase();
 
-  const filtered = products.filter(p =>
-    (p.name || "").toLowerCase().includes(q)
-  );
+// ❌ CLOSE MODAL
+document.getElementById("closeModal")
+  .addEventListener("click", () => {
 
-  render(filtered);
+    document.getElementById("productModal")
+      .classList.add("hidden");
 });
-document.getElementById("closeModal").onclick = () => {
-  document.getElementById("productModal").classList.add("hidden");
-};
 
-window.onclick = (e) => {
+// CLOSE ON BACKDROP CLICK
+window.addEventListener("click", (e) => {
   if (e.target.id === "productModal") {
-    document.getElementById("productModal").classList.add("hidden");
+    document.getElementById("productModal")
+      .classList.add("hidden");
   }
-};
+});
+
+// 🔍 SEARCH
+document.getElementById("searchInput")
+  .addEventListener("input", e => {
+
+    const q = e.target.value.toLowerCase();
+
+    const filtered = products.filter(p =>
+      (p.name || "").toLowerCase().includes(q)
+    );
+
+    render(filtered);
+});
+
 loadProducts();
