@@ -90,8 +90,8 @@ function render(list) {
     `;
   }).join("");
 
-  // 🪟 CARD CLICK
-  document.querySelectorAll(".card").forEach(card => {
+   // 🪟 DEAL CARD CLICK
+  document.querySelectorAll(".deal-card").forEach(card => {
 
     card.addEventListener("click", () => {
 
