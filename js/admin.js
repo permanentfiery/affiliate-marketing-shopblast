@@ -17,7 +17,6 @@ let editingId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ELEMENTS
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const saveBtn = document.getElementById("saveBtn");
@@ -30,6 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const linkEl = document.getElementById("link");
   const imageEl = document.getElementById("image");
   const descEl = document.getElementById("description");
+
+  const categoryEl = document.getElementById("category");
   const dealEl = document.getElementById("deal");
 
   const loginBox = document.getElementById("loginBox");
@@ -40,13 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // LOGIN
   loginBtn.addEventListener("click", async () => {
 
-    const email = emailEl.value.trim();
-    const pass = passEl.value.trim();
-
     try {
-      await signInWithEmailAndPassword(auth, email, pass);
+
+      await signInWithEmailAndPassword(
+        auth,
+        emailEl.value.trim(),
+        passEl.value.trim()
+      );
+
     } catch (err) {
+
       alert(err.message);
+
     }
 
   });
@@ -88,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
       link: linkEl.value.trim(),
       image: imageEl.value.trim(),
       description: descEl.value.trim(),
+      category: categoryEl.value,
       deal: dealEl.value === "yes"
     };
 
@@ -129,6 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
             ₹${(p.price / 100).toFixed(2)}
           </p>
 
+          <p>
+            ${p.category}
+          </p>
+
           <button class="editBtn"
                   data-id="${p.id}">
             Edit
@@ -165,7 +176,12 @@ document.addEventListener("DOMContentLoaded", () => {
         linkEl.value = p.link || "";
         imageEl.value = p.image || "";
         descEl.value = p.description || "";
-        dealEl.value = p.deal ? "yes" : "no";
+
+        categoryEl.value =
+          p.category || "Electronics & Gadgets";
+
+        dealEl.value =
+          p.deal ? "yes" : "no";
 
       });
 
@@ -198,6 +214,10 @@ document.addEventListener("DOMContentLoaded", () => {
     linkEl.value = "";
     imageEl.value = "";
     descEl.value = "";
+
+    categoryEl.value =
+      "Electronics & Gadgets";
+
     dealEl.value = "no";
 
   }
