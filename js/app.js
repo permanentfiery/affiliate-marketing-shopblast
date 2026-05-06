@@ -66,13 +66,13 @@ function render(list) {
   grid.innerHTML = list.map(p => {
 
     let price = "0.00";
+
     if (typeof p.price === "number") {
       price = (p.price / 100).toFixed(2);
     }
 
     return `
-      <div class="card"
-           data-id="${p.id}">
+      <div class="card" data-id="${p.id}">
 
         <img src="https://via.placeholder.com/300">
 
@@ -90,9 +90,11 @@ function render(list) {
     `;
   }).join("");
 
-  // 🪟 ADD CLICK HANDLERS
+  // 🪟 CARD CLICK
   document.querySelectorAll(".card").forEach(card => {
+
     card.addEventListener("click", () => {
+
       const id = card.dataset.id;
 
       const product = products.find(p => p.id === id);
@@ -100,11 +102,11 @@ function render(list) {
       if (product) {
         openModal(product);
       }
-    });
-  });
-}
 
-// 🪟 OPEN MODAL
+    });
+
+  });
+}// 🪟 OPEN MODAL
 function openModal(product) {
 
   document.getElementById("productModal")
