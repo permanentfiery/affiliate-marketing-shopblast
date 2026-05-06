@@ -9,7 +9,6 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// 📦 PRODUCTS COLLECTION
 const col = collection(db, "products");
 
 // 🔍 GET PRODUCTS
@@ -28,6 +27,8 @@ export async function getProducts() {
       link: data.link || "",
       image: data.image || "",
       description: data.description || "",
+      category:
+        data.category || "Electronics & Gadgets",
       deal: data.deal || false
     };
 
