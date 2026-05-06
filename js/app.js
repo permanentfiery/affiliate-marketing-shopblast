@@ -77,6 +77,28 @@ function render(list) {
   }).join("");
 }
 
+
+function openModal(product) {
+  document.getElementById("productModal").classList.remove("hidden");
+
+  document.getElementById("modalImg").src =
+    product.image || "https://via.placeholder.com/300";
+
+  document.getElementById("modalName").textContent =
+    product.name || "No Name";
+
+  const price = typeof product.price === "number"
+    ? (product.price / 100).toFixed(2)
+    : "0.00";
+
+  document.getElementById("modalPrice").textContent = `₹${price}`;
+
+  document.getElementById("modalDesc").textContent =
+    product.description || "No description available.";
+
+  document.getElementById("modalLink").href =
+    product.link || "#";
+}
 // 🔍 SEARCH
 document.getElementById("searchInput").addEventListener("input", e => {
   const q = e.target.value.toLowerCase();
