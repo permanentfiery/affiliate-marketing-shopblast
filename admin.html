@@ -13,7 +13,7 @@ body {
 }
 
 .box {
-  max-width: 600px;
+  max-width: 650px;
   margin: auto;
   border: 3px solid black;
   padding: 20px;
@@ -32,7 +32,6 @@ textarea {
 
 textarea {
   min-height: 120px;
-  resize: vertical;
 }
 
 button {
@@ -55,32 +54,25 @@ button:hover {
     3px 3px 0 black;
 }
 
-button:active {
-  transform: translate(-1px, -1px);
-
-  box-shadow:
-    1px 1px 0 black;
-}
-
-.product-item {
-  border: 2px solid black;
-  padding: 12px;
-  margin-top: 12px;
-}
-
-.imageInput {
+.image-row,
+.url-row {
+  display: flex;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
-#addImageBtn {
-  margin-bottom: 16px;
+.removeImageBtn,
+.removeUrlBtn {
+  background: red;
+  color: white;
+  min-width: 90px;
 }
 
 .preview-grid {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 16px;
+  flex-wrap: wrap;
+  margin-top: 12px;
 }
 
 .preview-grid img {
@@ -90,8 +82,10 @@ button:active {
   border: 2px solid black;
 }
 
-.section-title {
-  margin-top: 24px;
+.product-item {
+  border: 2px solid black;
+  padding: 12px;
+  margin-top: 12px;
 }
 </style>
 </head>
@@ -102,11 +96,10 @@ button:active {
 
   <h1>STEALMYFINDS ADMIN</h1>
 
-  <!-- 🔐 LOGIN -->
+  <!-- LOGIN -->
   <div id="loginBox">
 
-    <input id="email"
-           placeholder="Email">
+    <input id="email" placeholder="Email">
 
     <input id="password"
            type="password"
@@ -118,29 +111,25 @@ button:active {
 
   </div>
 
-  <!-- 🛍 ADMIN PANEL -->
+  <!-- ADMIN -->
   <div id="adminPanel"
        style="display:none;">
 
     <h2>Add / Edit Product</h2>
 
-    <!-- PRODUCT NAME -->
     <input id="name"
            placeholder="Product Name">
 
-    <!-- PRICE -->
     <input id="price"
            placeholder="Price in rupees">
 
-    <!-- AFFILIATE LINK -->
     <input id="link"
            placeholder="Affiliate Link">
 
-    <!-- DESCRIPTION -->
     <textarea id="description"
               placeholder="Description"></textarea>
 
-    <!-- 🧭 CATEGORY -->
+    <!-- CATEGORY -->
     <select id="category">
 
       <option value="Electronics & Gadgets">
@@ -165,7 +154,7 @@ button:active {
 
     </select>
 
-    <!-- 🔥 DEAL -->
+    <!-- DEAL -->
     <select id="deal">
 
       <option value="no">
@@ -178,16 +167,23 @@ button:active {
 
     </select>
 
-    <!-- 🖼 MULTI IMAGE UPLOAD -->
-    <h3 class="section-title">
-      Product Images
-    </h3>
+    <!-- LOCAL FILES -->
+    <h3>Local Images</h3>
 
     <div id="imageInputs">
 
-      <input type="file"
-             class="imageInput"
-             accept="image/*">
+      <div class="image-row">
+
+        <input type="file"
+               class="imageInput"
+               accept="image/*">
+
+        <button type="button"
+                class="removeImageBtn">
+          Remove
+        </button>
+
+      </div>
 
     </div>
 
@@ -196,31 +192,52 @@ button:active {
       + Add More Images
     </button>
 
-    <!-- 🖼 IMAGE PREVIEWS -->
+    <!-- URL IMAGES -->
+    <h3>Image URLs</h3>
+
+    <div id="urlInputs">
+
+      <div class="url-row">
+
+        <input type="text"
+               class="urlImageInput"
+               placeholder="Paste image URL">
+
+        <button type="button"
+                class="removeUrlBtn">
+          Remove
+        </button>
+
+      </div>
+
+    </div>
+
+    <button type="button"
+            id="addUrlBtn">
+      + Add Image URL
+    </button>
+
+    <!-- PREVIEW -->
     <div id="previewGrid"
          class="preview-grid"></div>
 
-    <!-- 💾 SAVE -->
+    <br>
+
     <button id="saveBtn">
       Save Product
     </button>
 
-    <!-- 🚪 LOGOUT -->
     <button id="logoutBtn"
             style="
               background:red;
               color:white;
-              margin-left:10px;
             ">
       Logout
     </button>
 
     <hr>
 
-    <!-- 📦 PRODUCTS -->
-    <h2 class="section-title">
-      Existing Products
-    </h2>
+    <h2>Existing Products</h2>
 
     <div id="productList"></div>
 
