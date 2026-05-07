@@ -20,10 +20,10 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 let editingId = null;
+let existingImages = [];
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 🔐 AUTH ELEMENTS
   const loginBtn =
     document.getElementById("loginBtn");
 
@@ -33,43 +33,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveBtn =
     document.getElementById("saveBtn");
 
-  // 🔑 LOGIN INPUTS
-  const emailEl =
-    document.getElementById("email");
-
-  const passEl =
-    document.getElementById("password");
-
-  // 🛍 PRODUCT INPUTS
-  const nameEl =
-    document.getElementById("name");
-
-  const priceEl =
-    document.getElementById("price");
-
-  const linkEl =
-    document.getElementById("link");
-
-  const descEl =
-    document.getElementById("description");
-
-  const categoryEl =
-    document.getElementById("category");
-
-  const dealEl =
-    document.getElementById("deal");
-
-  // 🖼 IMAGE SYSTEM
   const addImageBtn =
     document.getElementById("addImageBtn");
+
+  const addUrlBtn =
+    document.getElementById("addUrlBtn");
 
   const imageInputs =
     document.getElementById("imageInputs");
 
+  const urlInputs =
+    document.getElementById("urlInputs");
+
   const previewGrid =
     document.getElementById("previewGrid");
 
-  // 🧱 PANELS
   const loginBox =
     document.getElementById("loginBox");
 
@@ -86,8 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       await signInWithEmailAndPassword(
         auth,
-        emailEl.value.trim(),
-        passEl.value.trim()
+        document.getElementById("email").value,
+        document.getElementById("password").value
       );
 
     } catch (err) {
@@ -107,8 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-  // 👤 AUTH STATE
-  onAuthStateChanged(auth, (user) => {
+  // 👤 AUTH
+  onAuthStateChanged(auth, user => {
 
     if (user) {
 
@@ -128,25 +106,114 @@ document.addEventListener("DOMContentLoaded", () => {
 
   });
 
-  // ➕ ADD MORE IMAGE INPUTS
+  // ➕ ADD LOCAL IMAGE ROW
   addImageBtn.addEventListener("click", () => {
 
-    const input =
-      document.createElement("input");
+    const row =
+      document.createElement("div");
 
-    input.type = "file";
+    row.className = "image-row";
 
-    input.accept = "image/*";
+    row.innerHTML = `
 
-    input.className = "imageInput";
+      <input type="file"
+             class="imageInput"
+             accept="image/*">
 
-    imageInputs.appendChild(input);
+      <button type="button"
+              class="removeImageBtn">
+        Remove
+      </button>
 
-    attachPreview(input);
+    `;
+
+    imageInputs.appendChild(row);
+
+    attachPreview(
+      row.querySelector(".imageInput")
+    );
+
+    attachRemoveButtons();
 
   });
 
-  // 🖼 PREVIEW FUNCTION
+  // ➕ ADD URL IMAGE ROW
+  addUrlBtn.addEventListener("click", () => {
+
+    const row =
+      document.createElement("div");
+
+    row.className = "url-row";
+
+    row.innerHTML = `
+
+      <input type="text"
+             class="urlImageInput"
+             placeholder="Paste image URL">
+
+      <button type="button"
+              class="removeUrlBtn">
+        Remove
+      </button>
+
+    `;
+
+    urlInputs.appendChild(row);
+
+    attachRemoveButtons();
+
+  });
+
+  // ❌ REMOVE BUTTONS
+  function attachRemoveButtons() {
+
+    document.querySelectorAll(".removeImageBtn")
+      .forEach(btn => {
+
+        btn.onclick = () => {
+
+          const row =
+            btn.closest(".image-row");
+
+          if (
+            document.querySelectorAll(".image-row")
+              .length > 1
+          ) {
+
+            row.remove();
+
+          }
+
+        };
+
+    });
+
+    document.querySelectorAll(".removeUrlBtn")
+      .forEach(btn => {
+
+        btn.onclick = () => {
+
+          const row =
+            btn.closest(".url-row");
+
+          if (
+            document.querySelectorAll(".url-row")
+              .length > 1
+          ) {
+
+            row.remove();
+
+          }
+
+        };
+
+    });
+
+  }
+
+  attachRemoveButtons();
+
+  // 🖼 PREVIEW
   function attachPreview(input) {
 
     input.addEventListener("change", () => {
@@ -174,17 +241,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  // INITIAL PREVIEW SUPPORT
   document.querySelectorAll(".imageInput")
     .forEach(attachPreview);
 
   // ☁️ UPLOAD IMAGES
   async function uploadImages() {
 
+    const urls = [...existingImages];
+
+    // 🌐 URL IMAGES
+    document.querySelectorAll(".urlImageInput")
+      .forEach(input => {
+
+        const value =
+          input.value.trim();
+
+        if (value) {
+          urls.push(value);
+        }
+
+    });
+
+    // 📁 LOCAL FILES
     const inputs =
       document.querySelectorAll(".imageInput");
-
-    const urls = [];
 
     for (const input of inputs) {
 
@@ -213,35 +293,42 @@ document.addEventListener("DOMContentLoaded", () => {
   // 💾 SAVE PRODUCT
   saveBtn.addEventListener("click", async () => {
 
+    saveBtn.textContent = "Uploading...";
+
     try {
 
-      saveBtn.textContent = "Uploading...";
-
-      // ☁️ UPLOAD IMAGES
       const imageUrls =
         await uploadImages();
 
       const product = {
 
         name:
-          nameEl.value.trim(),
+          document.getElementById("name")
+            .value.trim(),
 
         price:
           Math.round(
-            parseFloat(priceEl.value) * 100
+            parseFloat(
+              document.getElementById("price")
+                .value
+            ) * 100
           ),
 
         link:
-          linkEl.value.trim(),
+          document.getElementById("link")
+            .value.trim(),
 
         description:
-          descEl.value.trim(),
+          document.getElementById("description")
+            .value.trim(),
 
         category:
-          categoryEl.value,
+          document.getElementById("category")
+            .value,
 
         deal:
-          dealEl.value === "yes",
+          document.getElementById("deal")
+            .value === "yes",
 
         images:
           imageUrls
@@ -363,28 +450,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
           editingId = id;
 
-          nameEl.value =
-            p.name || "";
+          existingImages =
+            p.images || [];
 
-          priceEl.value =
-            (p.price / 100).toFixed(2);
+          document.getElementById("name")
+            .value = p.name || "";
 
-          linkEl.value =
-            p.link || "";
+          document.getElementById("price")
+            .value =
+              (p.price / 100).toFixed(2);
 
-          descEl.value =
-            p.description || "";
+          document.getElementById("link")
+            .value = p.link || "";
 
-          categoryEl.value =
-            p.category ||
-            "Electronics & Gadgets";
+          document.getElementById("description")
+            .value =
+              p.description || "";
 
-          dealEl.value =
-            p.deal ? "yes" : "no";
+          document.getElementById("category")
+            .value =
+              p.category ||
+              "Electronics & Gadgets";
+
+          document.getElementById("deal")
+            .value =
+              p.deal ? "yes" : "no";
 
           previewGrid.innerHTML = "";
 
-          (p.images || []).forEach(imgUrl => {
+          existingImages.forEach(imgUrl => {
 
             const img =
               document.createElement("img");
@@ -425,29 +519,48 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🧹 CLEAR FORM
   function clearForm() {
 
-    nameEl.value = "";
-
-    priceEl.value = "";
-
-    linkEl.value = "";
-
-    descEl.value = "";
-
-    categoryEl.value =
-      "Electronics & Gadgets";
-
-    dealEl.value = "no";
+    existingImages = [];
 
     previewGrid.innerHTML = "";
 
     imageInputs.innerHTML = `
-      <input type="file"
-             class="imageInput"
-             accept="image/*">
+
+      <div class="image-row">
+
+        <input type="file"
+               class="imageInput"
+               accept="image/*">
+
+        <button type="button"
+                class="removeImageBtn">
+          Remove
+        </button>
+
+      </div>
+
+    `;
+
+    urlInputs.innerHTML = `
+
+      <div class="url-row">
+
+        <input type="text"
+               class="urlImageInput"
+               placeholder="Paste image URL">
+
+        <button type="button"
+                class="removeUrlBtn">
+          Remove
+        </button>
+
+      </div>
+
     `;
 
     document.querySelectorAll(".imageInput")
       .forEach(attachPreview);
+
+    attachRemoveButtons();
 
   }
 
