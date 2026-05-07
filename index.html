@@ -2,137 +2,198 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
 <title>StealMyFinds</title>
 
 <style>
+
 body {
   font-family: Arial;
   margin: 0;
   background: #fafafa;
 }
 
+/* 🧭 NAV */
 .nav {
   background: black;
   color: yellow;
-  padding: 16px;
-}
 
-.hero {
-  background: #FFD600;
-  padding: 30px 20px;
-  border-bottom: 3px solid black;
+  padding: 16px 24px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 30px;
-  flex-wrap: wrap;
 }
 
-.hero h2 {
+.nav h1 {
   margin: 0;
-  line-height: 1.4;
 }
 
+/* 🔥 HERO */
+.hero {
+  background: #FFD600;
+
+  padding: 50px 24px 40px;
+
+  border-bottom: 3px solid black;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 720px;
+
+  position: relative;
+  z-index: 2;
+}
+
+.hero-tag {
+  display: inline-block;
+
+  background: black;
+  color: yellow;
+
+  padding: 8px 14px;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  letter-spacing: 4px;
+
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-size: 92px;
+  font-weight: 900;
+
+  line-height: 0.9;
+
+  margin: 0 0 24px;
+
+  text-transform: uppercase;
+}
+
+.hero-title span {
+  color: inherit;
+}
+
+.hero-sub {
+  font-size: 20px;
+
+  max-width: 620px;
+
+  line-height: 1.5;
+
+  margin-bottom: 30px;
+}
+
+/* 🔍 SEARCH AREA */
 .hero-search {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
 
-.hero-search input {
-  width: 320px;
-  max-width: 100%;
+  align-items: stretch;
 
-  padding: 14px 16px;
+  max-width: 620px;
 
   border: 3px solid black;
 
-  font-size: 15px;
+  background: white;
+
+  box-shadow:
+    6px 6px 0 black;
+}
+
+.hero-search input {
+  flex: 1;
+
+  border: none;
+
+  padding: 20px;
+
+  font-size: 18px;
   font-weight: bold;
 
   outline: none;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
 }
 
-.hero-search input:focus {
-
-  transform: translate(-3px, -3px);
-
-  box-shadow:
-    3px 3px 0 black;
-
-}
-
-/* 🔍 SEARCH BUTTON */
 .search-btn {
   background: black;
   color: yellow;
 
-  border: 3px solid black;
+  border: none;
 
-  padding: 14px 20px;
+  padding: 0 30px;
 
+  font-size: 18px;
   font-weight: bold;
-  font-size: 15px;
 
   cursor: pointer;
 
   transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
     background 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .search-btn:hover {
-
-  transform:
-    translate(-4px, -4px)
-    scale(1.03);
-
-  box-shadow:
-    4px 4px 0px black;
 
   background: yellow;
   color: black;
 
 }
 
-.search-btn:active {
+/* 🔥 BIG BACKGROUND WORD */
+.hero-bg {
+  position: absolute;
 
-  transform:
-    translate(-1px, -1px)
-    scale(0.98);
+  right: 30px;
+  top: 20px;
 
-  box-shadow:
-    1px 1px 0px black;
+  font-size: 220px;
+  font-weight: 900;
 
+  color: rgba(0,0,0,0.05);
+
+  line-height: 1;
+
+  user-select: none;
+
+  pointer-events: none;
 }
 
+/* 🔥 DEALS */
 .deal {
   background: red;
   color: white;
+
   padding: 20px;
   margin: 20px;
+
   border: 3px solid black;
 }
 
+/* 🛍 GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(220px,1fr));
+
   gap: 20px;
+
   padding: 20px;
 }
 
+/* 🃏 CARDS */
 .card,
 .deal-card {
   background: white;
+
   border: 3px solid black;
 
   transition:
@@ -177,6 +238,7 @@ body {
   color: black;
 }
 
+/* 🟡 BUY BUTTONS */
 .buy,
 .deal-card .buy {
   background: black;
@@ -229,8 +291,11 @@ body {
 /* 🧭 CATEGORY TABS */
 .tabs {
   display: flex;
+
   gap: 14px;
+
   padding: 0 20px 24px;
+
   flex-wrap: wrap;
 }
 
@@ -241,6 +306,7 @@ body {
   padding: 0 22px;
 
   border: 3px solid black;
+
   background: white;
 
   display: flex;
@@ -283,6 +349,7 @@ body {
 /* 🪟 MODAL */
 .modal {
   position: fixed;
+
   top: 0;
   left: 0;
 
@@ -302,9 +369,13 @@ body {
 
 .modal-content {
   background: white;
+
   padding: 20px;
+
   border: 3px solid black;
+
   width: 340px;
+
   text-align: center;
 }
 
@@ -316,16 +387,22 @@ body {
 
 .close {
   float: right;
+
   cursor: pointer;
+
   font-size: 24px;
 }
 
 /* 🖼 GALLERY */
 #modalGallery {
   display: flex;
+
   gap: 10px;
+
   margin-top: 12px;
+
   flex-wrap: wrap;
+
   justify-content: center;
 }
 
@@ -353,53 +430,91 @@ body {
 
 }
 
-@media (max-width: 700px) {
+/* 📱 MOBILE */
+@media (max-width: 900px) {
 
-  .hero {
-    flex-direction: column;
-    align-items: flex-start;
+  .hero-title {
+    font-size: 64px;
   }
 
-  .hero-search {
-    width: 100%;
-  }
-
-  .hero-search input {
-    flex: 1;
-    width: 100%;
+  .hero-bg {
+    font-size: 120px;
   }
 
 }
+
+@media (max-width: 600px) {
+
+  .hero-title {
+    font-size: 46px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+  }
+
+  .hero-search {
+    flex-direction: column;
+  }
+
+  .search-btn {
+    height: 60px;
+  }
+
+  .hero-bg {
+    display: none;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
+<!-- 🧭 NAV -->
 <div class="nav">
 
   <h1>STEALMYFINDS</h1>
 
 </div>
 
-<!-- HERO -->
+<!-- 🔥 HERO -->
 <div class="hero">
 
-  <h2>
-    Deals | links | shopping <br>
-    Come steal my finds 🎀
-  </h2>
+  <!-- BACKGROUND TEXT -->
+  <div class="hero-bg">
+    HOT
+  </div>
 
-  <!-- 🔍 SEARCH -->
-  <div class="hero-search">
+  <div class="hero-content">
 
-    <input id="searchInput"
-           placeholder="Search products...">
+    <div class="hero-tag">
+      BEST DEALS CURATED DAILY
+    </div>
 
-    <button id="searchBtn"
-            class="search-btn">
-      Search
-    </button>
+    <h1 class="hero-title">
+      FIND THE BEST <br>
+      PRODUCTS.
+    </h1>
+
+    <p class="hero-sub">
+      Top affiliate picks across Electronics,
+      Fashion, Home, Health & More.
+    </p>
+
+    <!-- 🔍 SEARCH -->
+    <div class="hero-search">
+
+      <input id="searchInput"
+             placeholder="Search products, brands, categories...">
+
+      <button id="searchBtn"
+              class="search-btn">
+        SEARCH
+      </button>
+
+    </div>
 
   </div>
 
