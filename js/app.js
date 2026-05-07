@@ -56,7 +56,6 @@ function renderDeal(products) {
 
           }
 
-          // ✅ SUPPORT OLD + NEW IMAGES
           const image =
 
             p.images?.[0] ||
@@ -103,7 +102,6 @@ function renderDeal(products) {
     </div>
   `;
 
-  // 🪟 DEAL CARD CLICK
   document.querySelectorAll(".deal-card")
     .forEach(card => {
 
@@ -154,7 +152,6 @@ function render(list) {
 
     }
 
-    // ✅ SUPPORT OLD + NEW IMAGES
     const image =
 
       p.images?.[0] ||
@@ -195,7 +192,6 @@ function render(list) {
     `;
   }).join("");
 
-  // 🪟 PRODUCT CARD CLICK
   document.querySelectorAll(".card")
     .forEach(card => {
 
@@ -219,13 +215,12 @@ function render(list) {
 
 }
 
-// 🪟 OPEN MODAL
+// 🪟 PRODUCT MODAL
 function openModal(product) {
 
   document.getElementById("productModal")
     .classList.remove("hidden");
 
-  // ✅ MAIN IMAGE
   document.getElementById("modalImg").src =
 
     product.images?.[0] ||
@@ -233,13 +228,11 @@ function openModal(product) {
 
     "https://via.placeholder.com/300";
 
-  // NAME
   document.getElementById("modalName")
     .textContent =
 
       product.name || "No Name";
 
-  // PRICE
   let price = "0.00";
 
   if (typeof product.price === "number") {
@@ -252,14 +245,12 @@ function openModal(product) {
   document.getElementById("modalPrice")
     .textContent = `₹${price}`;
 
-  // DESCRIPTION
   document.getElementById("modalDesc")
     .textContent =
 
       product.description ||
       "No description available.";
 
-  // LINK
   document.getElementById("modalLink")
     .href =
 
@@ -271,7 +262,6 @@ function openModal(product) {
 
   if (gallery) {
 
-    // ✅ SUPPORT OLD + NEW IMAGES
     const galleryImages =
 
       (product.images || [product.image])
@@ -287,7 +277,6 @@ function openModal(product) {
 
       `).join("");
 
-    // 🔄 SWITCH IMAGE
     document.querySelectorAll(".gallery-thumb")
       .forEach(img => {
 
@@ -313,7 +302,7 @@ document.getElementById("closeModal")
 
 });
 
-// CLOSE ON BACKDROP CLICK
+// CLOSE ON OUTSIDE CLICK
 window.addEventListener("click", (e) => {
 
   if (e.target.id === "productModal") {
@@ -325,37 +314,76 @@ window.addEventListener("click", (e) => {
 
 });
 
-// 🔍 SEARCH
-document.getElementById("searchInput")
-  .addEventListener("input", e => {
+// 🔍 SEARCH SYSTEM
+const searchInput =
+  document.getElementById("searchInput");
 
-    const q =
-      e.target.value.toLowerCase();
+const searchBtn =
+  document.getElementById("searchBtn");
 
-    let filtered =
+function performSearch() {
 
-      products.filter(p =>
+  const q =
+    searchInput.value.toLowerCase();
 
-        (p.name || "")
-          .toLowerCase()
-          .includes(q)
+  let filtered =
+
+    products.filter(p =>
+
+      (p.name || "")
+        .toLowerCase()
+        .includes(q)
+
+    );
+
+  if (activeCategory !== "All") {
+
+    filtered =
+      filtered.filter(p =>
+
+        p.category === activeCategory
 
       );
 
-    if (activeCategory !== "All") {
+  }
 
-      filtered =
-        filtered.filter(p =>
+  render(filtered);
 
-          p.category === activeCategory
+  // 🔥 AUTO SCROLL
+  document.getElementById("productGrid")
+    .scrollIntoView({
 
-        );
+      behavior: "smooth"
+
+    });
+
+}
+
+// 🔘 SEARCH BUTTON
+searchBtn.addEventListener(
+  "click",
+  performSearch
+);
+
+// ⌨️ ENTER KEY
+searchInput.addEventListener(
+  "keydown",
+  e => {
+
+    if (e.key === "Enter") {
+
+      performSearch();
 
     }
 
-    render(filtered);
+  }
+);
 
-});
+// 🔎 LIVE SEARCH
+searchInput.addEventListener(
+  "input",
+  performSearch
+);
 
 // 🧭 CATEGORY FILTER
 document.querySelectorAll(".tab")
