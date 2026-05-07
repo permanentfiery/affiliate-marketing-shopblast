@@ -15,11 +15,13 @@ async function loadProducts() {
 // 🔥 DEAL SECTION
 function renderDeal(products) {
 
-  const el = document.getElementById("dealSection");
+  const el =
+    document.getElementById("dealSection");
 
   if (!el) return;
 
-  const deals = products.filter(p => p.deal === true);
+  const deals =
+    products.filter(p => p.deal === true);
 
   if (deals.length === 0) {
 
@@ -42,20 +44,32 @@ function renderDeal(products) {
 
         ${deals.map(p => {
 
-          const name = p.name || "No Name";
+          const name =
+            p.name || "No Name";
 
           let price = "0.00";
 
           if (typeof p.price === "number") {
-            price = (p.price / 100).toFixed(2);
+
+            price =
+              (p.price / 100).toFixed(2);
+
           }
+
+          // ✅ SUPPORT OLD + NEW IMAGES
+          const image =
+
+            p.images?.[0] ||
+            p.image ||
+
+            "https://via.placeholder.com/100";
 
           return `
             <div class="deal-card"
                  data-id="${p.id}">
 
               <img
-                src="${p.image || 'https://via.placeholder.com/100'}"
+                src="${image}"
 
                 style="
                   width:100px;
@@ -66,7 +80,9 @@ function renderDeal(products) {
               <h4>${name}</h4>
 
               <p>
-                <b>${p.category || "General"}</b>
+                <b>
+                  ${p.category || "General"}
+                </b>
               </p>
 
               <p>
@@ -88,19 +104,24 @@ function renderDeal(products) {
   `;
 
   // 🪟 DEAL CARD CLICK
-  document.querySelectorAll(".deal-card").forEach(card => {
+  document.querySelectorAll(".deal-card")
+    .forEach(card => {
 
-    card.addEventListener("click", () => {
+      card.addEventListener("click", () => {
 
-      const id = card.dataset.id;
+        const id =
+          card.dataset.id;
 
-      const product = products.find(p => p.id === id);
+        const product =
+          products.find(p => p.id === id);
 
-      if (product) {
-        openModal(product);
-      }
+        if (product) {
 
-    });
+          openModal(product);
+
+        }
+
+      });
 
   });
 
@@ -109,22 +130,44 @@ function renderDeal(products) {
 // 🛍 PRODUCT GRID
 function render(list) {
 
-  const grid = document.getElementById("productGrid");
+  const grid =
+    document.getElementById("productGrid");
+
+  if (list.length === 0) {
+
+    grid.innerHTML = `
+      <h2>No products found.</h2>
+    `;
+
+    return;
+
+  }
 
   grid.innerHTML = list.map(p => {
 
     let price = "0.00";
 
     if (typeof p.price === "number") {
-      price = (p.price / 100).toFixed(2);
+
+      price =
+        (p.price / 100).toFixed(2);
+
     }
+
+    // ✅ SUPPORT OLD + NEW IMAGES
+    const image =
+
+      p.images?.[0] ||
+      p.image ||
+
+      "https://via.placeholder.com/300";
 
     return `
       <div class="card"
            data-id="${p.id}">
 
         <img
-          src="${p.image || 'https://via.placeholder.com/300'}"
+          src="${image}"
 
           style="
             width:100%;
@@ -135,7 +178,9 @@ function render(list) {
         <h3>${p.name || "No Name"}</h3>
 
         <p>
-          <b>${p.category || "General"}</b>
+          <b>
+            ${p.category || "General"}
+          </b>
         </p>
 
         <p>₹${price}</p>
@@ -151,19 +196,24 @@ function render(list) {
   }).join("");
 
   // 🪟 PRODUCT CARD CLICK
-  document.querySelectorAll(".card").forEach(card => {
+  document.querySelectorAll(".card")
+    .forEach(card => {
 
-    card.addEventListener("click", () => {
+      card.addEventListener("click", () => {
 
-      const id = card.dataset.id;
+        const id =
+          card.dataset.id;
 
-      const product = products.find(p => p.id === id);
+        const product =
+          products.find(p => p.id === id);
 
-      if (product) {
-        openModal(product);
-      }
+        if (product) {
 
-    });
+          openModal(product);
+
+        }
+
+      });
 
   });
 
@@ -175,26 +225,82 @@ function openModal(product) {
   document.getElementById("productModal")
     .classList.remove("hidden");
 
+  // ✅ MAIN IMAGE
   document.getElementById("modalImg").src =
-    product.image || "https://via.placeholder.com/300";
 
-  document.getElementById("modalName").textContent =
-    product.name || "No Name";
+    product.images?.[0] ||
+    product.image ||
 
+    "https://via.placeholder.com/300";
+
+  // NAME
+  document.getElementById("modalName")
+    .textContent =
+
+      product.name || "No Name";
+
+  // PRICE
   let price = "0.00";
 
   if (typeof product.price === "number") {
-    price = (product.price / 100).toFixed(2);
+
+    price =
+      (product.price / 100).toFixed(2);
+
   }
 
-  document.getElementById("modalPrice").textContent =
-    `₹${price}`;
+  document.getElementById("modalPrice")
+    .textContent = `₹${price}`;
 
-  document.getElementById("modalDesc").textContent =
-    product.description || "No description available.";
+  // DESCRIPTION
+  document.getElementById("modalDesc")
+    .textContent =
 
-  document.getElementById("modalLink").href =
-    product.link || "#";
+      product.description ||
+      "No description available.";
+
+  // LINK
+  document.getElementById("modalLink")
+    .href =
+
+      product.link || "#";
+
+  // 🖼 GALLERY
+  const gallery =
+    document.getElementById("modalGallery");
+
+  if (gallery) {
+
+    // ✅ SUPPORT OLD + NEW IMAGES
+    const galleryImages =
+
+      (product.images || [product.image])
+        .filter(Boolean);
+
+    gallery.innerHTML =
+
+      galleryImages.map(img => `
+
+        <img
+          src="${img}"
+          class="gallery-thumb">
+
+      `).join("");
+
+    // 🔄 SWITCH IMAGE
+    document.querySelectorAll(".gallery-thumb")
+      .forEach(img => {
+
+        img.addEventListener("click", () => {
+
+          document.getElementById("modalImg")
+            .src = img.src;
+
+        });
+
+    });
+
+  }
 
 }
 
@@ -223,19 +329,27 @@ window.addEventListener("click", (e) => {
 document.getElementById("searchInput")
   .addEventListener("input", e => {
 
-    const q = e.target.value.toLowerCase();
+    const q =
+      e.target.value.toLowerCase();
 
-    let filtered = products.filter(p =>
-      (p.name || "")
-        .toLowerCase()
-        .includes(q)
-    );
+    let filtered =
+
+      products.filter(p =>
+
+        (p.name || "")
+          .toLowerCase()
+          .includes(q)
+
+      );
 
     if (activeCategory !== "All") {
 
-      filtered = filtered.filter(p =>
-        p.category === activeCategory
-      );
+      filtered =
+        filtered.filter(p =>
+
+          p.category === activeCategory
+
+        );
 
     }
 
@@ -244,30 +358,37 @@ document.getElementById("searchInput")
 });
 
 // 🧭 CATEGORY FILTER
-document.querySelectorAll(".tab").forEach(tab => {
+document.querySelectorAll(".tab")
+  .forEach(tab => {
 
-  tab.addEventListener("click", () => {
+    tab.addEventListener("click", () => {
 
-    document.querySelectorAll(".tab")
-      .forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".tab")
+        .forEach(t =>
+          t.classList.remove("active")
+        );
 
-    tab.classList.add("active");
+      tab.classList.add("active");
 
-    activeCategory = tab.dataset.category;
+      activeCategory =
+        tab.dataset.category;
 
-    let filtered = [...products];
+      let filtered = [...products];
 
-    if (activeCategory !== "All") {
+      if (activeCategory !== "All") {
 
-      filtered = filtered.filter(p =>
-        p.category === activeCategory
-      );
+        filtered =
+          filtered.filter(p =>
 
-    }
+            p.category === activeCategory
 
-    render(filtered);
+          );
 
-  });
+      }
+
+      render(filtered);
+
+    });
 
 });
 
