@@ -11,7 +11,6 @@ import {
 
 const col = collection(db, "products");
 
-// 🔍 GET PRODUCTS
 export async function getProducts() {
 
   const snap = await getDocs(col);
@@ -25,10 +24,9 @@ export async function getProducts() {
       name: data.name || "",
       price: data.price || 0,
       link: data.link || "",
-      image: data.image || "",
+      images: data.images || [],
       description: data.description || "",
-      category:
-        data.category || "Electronics & Gadgets",
+      category: data.category || "Electronics & Gadgets",
       deal: data.deal || false
     };
 
@@ -36,14 +34,10 @@ export async function getProducts() {
 
 }
 
-// ➕ ADD PRODUCT
 export async function addProduct(product) {
-
   return await addDoc(col, product);
-
 }
 
-// ✏️ UPDATE PRODUCT
 export async function updateProduct(id, data) {
 
   const ref = doc(db, "products", id);
@@ -52,7 +46,6 @@ export async function updateProduct(id, data) {
 
 }
 
-// ❌ DELETE PRODUCT
 export async function deleteProduct(id) {
 
   const ref = doc(db, "products", id);
