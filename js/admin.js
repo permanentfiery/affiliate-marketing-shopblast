@@ -13,6 +13,14 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+import { storage } from "./firebase.js";
+
 let editingId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
