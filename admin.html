@@ -13,7 +13,7 @@ body {
 }
 
 .box {
-  max-width: 500px;
+  max-width: 600px;
   margin: auto;
   border: 3px solid black;
   padding: 20px;
@@ -25,7 +25,14 @@ select,
 textarea {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  border: 2px solid black;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
 button {
@@ -35,17 +42,56 @@ button {
   color: yellow;
   cursor: pointer;
   font-weight: bold;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 button:hover {
   transform: translate(-3px, -3px);
-  box-shadow: 3px 3px 0 black;
+
+  box-shadow:
+    3px 3px 0 black;
+}
+
+button:active {
+  transform: translate(-1px, -1px);
+
+  box-shadow:
+    1px 1px 0 black;
 }
 
 .product-item {
   border: 2px solid black;
-  padding: 10px;
-  margin-top: 10px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.imageInput {
+  margin-bottom: 10px;
+}
+
+#addImageBtn {
+  margin-bottom: 16px;
+}
+
+.preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.preview-grid img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid black;
+}
+
+.section-title {
+  margin-top: 24px;
 }
 </style>
 </head>
@@ -56,10 +102,11 @@ button:hover {
 
   <h1>STEALMYFINDS ADMIN</h1>
 
-  <!-- LOGIN -->
+  <!-- 🔐 LOGIN -->
   <div id="loginBox">
 
-    <input id="email" placeholder="Email">
+    <input id="email"
+           placeholder="Email">
 
     <input id="password"
            type="password"
@@ -71,22 +118,25 @@ button:hover {
 
   </div>
 
-  <!-- ADMIN PANEL -->
-  <div id="adminPanel" style="display:none;">
+  <!-- 🛍 ADMIN PANEL -->
+  <div id="adminPanel"
+       style="display:none;">
 
     <h2>Add / Edit Product</h2>
 
-    <input id="name" placeholder="Product Name">
+    <!-- PRODUCT NAME -->
+    <input id="name"
+           placeholder="Product Name">
 
+    <!-- PRICE -->
     <input id="price"
            placeholder="Price in rupees">
 
+    <!-- AFFILIATE LINK -->
     <input id="link"
            placeholder="Affiliate Link">
 
-    <input id="image"
-           placeholder="Image URL">
-
+    <!-- DESCRIPTION -->
     <textarea id="description"
               placeholder="Description"></textarea>
 
@@ -128,18 +178,49 @@ button:hover {
 
     </select>
 
+    <!-- 🖼 MULTI IMAGE UPLOAD -->
+    <h3 class="section-title">
+      Product Images
+    </h3>
+
+    <div id="imageInputs">
+
+      <input type="file"
+             class="imageInput"
+             accept="image/*">
+
+    </div>
+
+    <button type="button"
+            id="addImageBtn">
+      + Add More Images
+    </button>
+
+    <!-- 🖼 IMAGE PREVIEWS -->
+    <div id="previewGrid"
+         class="preview-grid"></div>
+
+    <!-- 💾 SAVE -->
     <button id="saveBtn">
       Save Product
     </button>
 
+    <!-- 🚪 LOGOUT -->
     <button id="logoutBtn"
-            style="background:red;color:white;">
+            style="
+              background:red;
+              color:white;
+              margin-left:10px;
+            ">
       Logout
     </button>
 
     <hr>
 
-    <h2>Existing Products</h2>
+    <!-- 📦 PRODUCTS -->
+    <h2 class="section-title">
+      Existing Products
+    </h2>
 
     <div id="productList"></div>
 
