@@ -54,8 +54,14 @@ function renderDeal(products) {
             <div class="deal-card"
                  data-id="${p.id}">
 
-              <img src="https://via.placeholder.com/100"
-                   style="width:100px;height:100px;">
+              <img
+                src="${p.image || 'https://via.placeholder.com/100'}"
+
+                style="
+                  width:100px;
+                  height:100px;
+                  object-fit:cover;
+                ">
 
               <h4>${name}</h4>
 
@@ -117,7 +123,14 @@ function render(list) {
       <div class="card"
            data-id="${p.id}">
 
-        <img src="https://via.placeholder.com/300">
+        <img
+          src="${p.image || 'https://via.placeholder.com/300'}"
+
+          style="
+            width:100%;
+            height:220px;
+            object-fit:cover;
+          ">
 
         <h3>${p.name || "No Name"}</h3>
 
@@ -163,7 +176,7 @@ function openModal(product) {
     .classList.remove("hidden");
 
   document.getElementById("modalImg").src =
-    "https://via.placeholder.com/300";
+    product.image || "https://via.placeholder.com/300";
 
   document.getElementById("modalName").textContent =
     product.name || "No Name";
