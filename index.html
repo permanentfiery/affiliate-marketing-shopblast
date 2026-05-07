@@ -118,73 +118,59 @@ body {
     1px 1px 0px black;
 }
 
-/* 🧭 CATEGORY TABS */
+/* 🧭 PROFESSIONAL CATEGORY TABS */
 .tabs {
   display: flex;
-  gap: 10px;
-  padding: 0 20px 20px;
+  gap: 14px;
+  padding: 0 20px 24px;
   flex-wrap: wrap;
 }
 
 .tab {
-  border: 2px solid black;
-  background: white;
-  padding: 10px 14px;
-  cursor: pointer;
-  font-weight: bold;
+  min-width: 170px;
+  height: 54px;
 
-  width: 140px;
-  height: 46px;
+  padding: 0 22px;
+
+  border: 3px solid black;
+  background: white;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;
+  text-align: center;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
 
   transition:
-    width 0.25s ease,
+    min-width 0.25s ease,
     transform 0.15s ease,
     box-shadow 0.15s ease,
     background 0.15s ease,
     color 0.15s ease;
-}
-
-/* text wrapper */
-.tab span {
-  display: inline-block;
 
   white-space: nowrap;
-
-  transform: translateX(-15px);
-
-  transition:
-    transform 0.25s ease,
-    opacity 0.25s ease;
-
-  opacity: 0.75;
 }
 
-/* 🔥 HOVER */
+/* 🔥 EXPAND ON HOVER */
 .tab:hover {
-  width: 240px;
+  min-width: 240px;
 
-  transform: translate(-3px, -3px);
+  transform: translate(-4px, -4px);
 
   box-shadow:
-    3px 3px 0 black;
-}
-
-.tab:hover span {
-  transform: translateX(0px);
-
-  opacity: 1;
+    4px 4px 0px black;
 }
 
 .tab.active {
   background: black;
   color: yellow;
 }
+
 /* 🪟 MODAL */
 .modal {
   position: fixed;
@@ -250,20 +236,18 @@ body {
   </button>
 
   <button class="tab"
-        data-category="Electronics & Gadgets">
-  <span>Electronics & Gadgets</span>
-</button>
+          data-category="Electronics & Gadgets">
+    Electronics & Gadgets
+  </button>
 
   <button class="tab"
           data-category="Fashion & Beauty">
-    <span>
     Fashion & Beauty
-      </span>
   </button>
 
   <button class="tab"
           data-category="Home & Kitchen">
-    <span>Home & Kitchen</span>
+    Home & Kitchen
   </button>
 
   <button class="tab"
@@ -273,7 +257,7 @@ body {
 
   <button class="tab"
           data-category="Books & Courses">
-   <span> Books & Courses</span>
+    Books & Courses
   </button>
 
 </div>
