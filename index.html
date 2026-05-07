@@ -38,6 +38,8 @@ body {
 .hero-search {
   display: flex;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .hero-search input {
@@ -64,6 +66,52 @@ body {
 
   box-shadow:
     3px 3px 0 black;
+
+}
+
+/* 🔍 SEARCH BUTTON */
+.search-btn {
+  background: black;
+  color: yellow;
+
+  border: 3px solid black;
+
+  padding: 14px 20px;
+
+  font-weight: bold;
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.search-btn:hover {
+
+  transform:
+    translate(-4px, -4px)
+    scale(1.03);
+
+  box-shadow:
+    4px 4px 0px black;
+
+  background: yellow;
+  color: black;
+
+}
+
+.search-btn:active {
+
+  transform:
+    translate(-1px, -1px)
+    scale(0.98);
+
+  box-shadow:
+    1px 1px 0px black;
 
 }
 
@@ -312,7 +360,12 @@ body {
     align-items: flex-start;
   }
 
+  .hero-search {
+    width: 100%;
+  }
+
   .hero-search input {
+    flex: 1;
     width: 100%;
   }
 
@@ -343,6 +396,11 @@ body {
     <input id="searchInput"
            placeholder="Search products...">
 
+    <button id="searchBtn"
+            class="search-btn">
+      Search
+    </button>
+
   </div>
 
 </div>
@@ -350,7 +408,7 @@ body {
 <!-- 🔥 DEALS -->
 <div id="dealSection"></div>
 
-<!-- 🧭 CATEGORYS -->
+<!-- 🧭 CATEGORIES -->
 <div id="categoryTabs"
      class="tabs">
 
