@@ -72,15 +72,15 @@ function renderDeal(products) {
 
                 style="
                   width:100%;
+                  max-width:100%;
+
                   height:100px;
 
                   object-fit:cover;
 
                   display:block;
 
-                  background:#f2f2f2;
-
-                  overflow:hidden;
+                  flex-shrink:0;
                 ">
 
               <h4>${name}</h4>
@@ -175,15 +175,15 @@ function render(list) {
 
           style="
             width:100%;
+            max-width:100%;
+
             height:220px;
 
             object-fit:cover;
 
             display:block;
 
-            background:#f2f2f2;
-
-            overflow:hidden;
+            flex-shrink:0;
           ">
 
         <h3>${p.name || "No Name"}</h3>
@@ -235,13 +235,6 @@ function openModal(product) {
   document.getElementById("productModal")
     .classList.remove("hidden");
 
-  document.getElementById("modalImg").src =
-
-    product.images?.[0] ||
-    product.image ||
-
-    "https://via.placeholder.com/300";
-
   document.getElementById("modalName")
     .textContent =
 
@@ -270,37 +263,100 @@ function openModal(product) {
 
       product.link || "#";
 
-  const gallery =
-    document.getElementById("modalGallery");
+  // 🖼 IMAGES
+  const images =
 
-  if (gallery) {
+    (product.images || [product.image])
+      .filter(Boolean);
 
-    const galleryImages =
+  const sliderTrack =
+    document.getElementById("sliderTrack");
 
-      (product.images || [product.image])
-        .filter(Boolean);
+  const sliderControls =
+    document.getElementById("sliderControls");
 
-    gallery.innerHTML =
+  sliderTrack.innerHTML = "";
+  sliderControls.innerHTML = "";
 
-      galleryImages.map(img => `
+  let currentSlide = 0;
 
-        <img
-          src="${img}"
-          class="gallery-thumb">
+  // 🎞 CREATE SLIDES
+  images.forEach((img, index) => {
 
-      `).join("");
+    sliderTrack.innerHTML += `
 
-    document.querySelectorAll(".gallery-thumb")
-      .forEach(img => {
+      <div class="slide">
 
-        img.addEventListener("click", () => {
+        <img src="${img}">
 
-          document.getElementById("modalImg")
-            .src = img.src;
+      </div>
 
-        });
+    `;
+
+    sliderControls.innerHTML += `
+
+      <button
+        class="slider-dot
+          ${index === 0 ? "active" : ""}"
+
+        data-index="${index}">
+      </button>
+
+    `;
+
+  });
+
+  const dots =
+    document.querySelectorAll(".slider-dot");
+
+  function updateSlider(index) {
+
+    currentSlide = index;
+
+    sliderTrack.style.transform =
+      `translateX(-${index * 100}%)`;
+
+    dots.forEach(dot =>
+      dot.classList.remove("active")
+    );
+
+    dots[index].classList.add("active");
+
+  }
+
+  // 🔘 DOT CLICK
+  dots.forEach(dot => {
+
+    dot.addEventListener("click", () => {
+
+      updateSlider(
+        Number(dot.dataset.index)
+      );
 
     });
+
+  });
+
+  // ⏱ AUTO SLIDE
+  if (window.sliderInterval) {
+
+    clearInterval(window.sliderInterval);
+
+  }
+
+  if (images.length > 1) {
+
+    window.sliderInterval = setInterval(() => {
+
+      currentSlide++;
+
+      if (currentSlide >= images.length) {
+        currentSlide = 0;
+      }
+
+      updateSlider(currentSlide);
+
+    }, 5000);
 
   }
 
@@ -313,6 +369,8 @@ document.getElementById("closeModal")
     document.getElementById("productModal")
       .classList.add("hidden");
 
+    clearInterval(window.sliderInterval);
+
 });
 
 // CLOSE ON OUTSIDE CLICK
@@ -322,6 +380,8 @@ window.addEventListener("click", (e) => {
 
     document.getElementById("productModal")
       .classList.add("hidden");
+
+    clearInterval(window.sliderInterval);
 
   }
 
