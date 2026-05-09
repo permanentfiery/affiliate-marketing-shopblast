@@ -57,31 +57,15 @@ function renderDeal(products) {
           }
 
           const image =
-
             p.images?.[0] ||
             p.image ||
-
             "https://via.placeholder.com/100";
 
           return `
             <div class="deal-card"
                  data-id="${p.id}">
 
-              <img
-                src="${image}"
-
-                style="
-                  width:100%;
-                  max-width:100%;
-
-                  height:100px;
-
-                  object-fit:cover;
-
-                  display:block;
-
-                  flex-shrink:0;
-                ">
+              <img src="${image}">
 
               <h4>${name}</h4>
 
@@ -160,31 +144,15 @@ function render(list) {
     }
 
     const image =
-
       p.images?.[0] ||
       p.image ||
-
       "https://via.placeholder.com/300";
 
     return `
       <div class="card"
            data-id="${p.id}">
 
-        <img
-          src="${image}"
-
-          style="
-            width:100%;
-            max-width:100%;
-
-            height:220px;
-
-            object-fit:cover;
-
-            display:block;
-
-            flex-shrink:0;
-          ">
+        <img src="${image}">
 
         <h3>${p.name || "No Name"}</h3>
 
@@ -235,9 +203,10 @@ function openModal(product) {
   document.getElementById("productModal")
     .classList.remove("hidden");
 
+  document.body.style.overflow = "hidden";
+
   document.getElementById("modalName")
     .textContent =
-
       product.name || "No Name";
 
   let price = "0.00";
@@ -254,18 +223,15 @@ function openModal(product) {
 
   document.getElementById("modalDesc")
     .textContent =
-
       product.description ||
       "No description available.";
 
   document.getElementById("modalLink")
     .href =
-
       product.link || "#";
 
   // 🖼 IMAGES
   const images =
-
     (product.images || [product.image])
       .filter(Boolean);
 
@@ -283,26 +249,28 @@ function openModal(product) {
   // 🎞 CREATE SLIDES
   images.forEach((img, index) => {
 
-    sliderTrack.innerHTML += `
+    const slide =
+      document.createElement("div");
 
-      <div class="slide">
+    slide.className = "slide";
 
-        <img src="${img}">
-
-      </div>
-
+    slide.innerHTML = `
+      <img src="${img}">
     `;
 
-    sliderControls.innerHTML += `
+    sliderTrack.appendChild(slide);
 
-      <button
-        class="slider-dot
-          ${index === 0 ? "active" : ""}"
+    const dot =
+      document.createElement("button");
 
-        data-index="${index}">
-      </button>
+    dot.className =
+      `slider-dot ${
+        index === 0 ? "active" : ""
+      }`;
 
-    `;
+    dot.dataset.index = index;
+
+    sliderControls.appendChild(dot);
 
   });
 
@@ -311,20 +279,35 @@ function openModal(product) {
 
   function updateSlider(index) {
 
+    if (index < 0) {
+      index = images.length - 1;
+    }
+
+    if (index >= images.length) {
+      index = 0;
+    }
+
     currentSlide = index;
 
     sliderTrack.style.transform =
-      `translateX(-${index * 100}%)`;
+      `translateX(-${currentSlide * 100}%)`;
 
-    dots.forEach(dot =>
-      dot.classList.remove("active")
-    );
+    dots.forEach(dot => {
 
-    dots[index].classList.add("active");
+      dot.classList.remove("active");
+
+    });
+
+    if (dots[currentSlide]) {
+
+      dots[currentSlide]
+        .classList.add("active");
+
+    }
 
   }
 
-  // 🔘 DOT CLICK
+  // 🔘 DOTS
   dots.forEach(dot => {
 
     dot.addEventListener("click", () => {
@@ -337,28 +320,56 @@ function openModal(product) {
 
   });
 
+  // ⬅️➡️ BUTTONS
+  const oldPrev =
+    document.getElementById("prevSlide");
+
+  const oldNext =
+    document.getElementById("nextSlide");
+
+  const newPrev =
+    oldPrev.cloneNode(true);
+
+  const newNext =
+    oldNext.cloneNode(true);
+
+  oldPrev.parentNode.replaceChild(
+    newPrev,
+    oldPrev
+  );
+
+  oldNext.parentNode.replaceChild(
+    newNext,
+    oldNext
+  );
+
+  newPrev.addEventListener("click", () => {
+
+    updateSlider(currentSlide - 1);
+
+  });
+
+  newNext.addEventListener("click", () => {
+
+    updateSlider(currentSlide + 1);
+
+  });
+
   // ⏱ AUTO SLIDE
-  if (window.sliderInterval) {
-
-    clearInterval(window.sliderInterval);
-
-  }
+  clearInterval(window.sliderInterval);
 
   if (images.length > 1) {
 
-    window.sliderInterval = setInterval(() => {
+    window.sliderInterval =
+      setInterval(() => {
 
-      currentSlide++;
+        updateSlider(currentSlide + 1);
 
-      if (currentSlide >= images.length) {
-        currentSlide = 0;
-      }
-
-      updateSlider(currentSlide);
-
-    }, 5000);
+      }, 5000);
 
   }
+
+  updateSlider(0);
 
 }
 
@@ -368,6 +379,8 @@ document.getElementById("closeModal")
 
     document.getElementById("productModal")
       .classList.add("hidden");
+
+    document.body.style.overflow = "auto";
 
     clearInterval(window.sliderInterval);
 
@@ -380,6 +393,8 @@ window.addEventListener("click", (e) => {
 
     document.getElementById("productModal")
       .classList.add("hidden");
+
+    document.body.style.overflow = "auto";
 
     clearInterval(window.sliderInterval);
 
