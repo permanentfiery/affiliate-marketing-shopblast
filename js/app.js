@@ -71,9 +71,16 @@ function renderDeal(products) {
                 src="${image}"
 
                 style="
-                  width:100px;
+                  width:100%;
                   height:100px;
+
                   object-fit:cover;
+
+                  display:block;
+
+                  background:#f2f2f2;
+
+                  overflow:hidden;
                 ">
 
               <h4>${name}</h4>
@@ -169,7 +176,14 @@ function render(list) {
           style="
             width:100%;
             height:220px;
+
             object-fit:cover;
+
+            display:block;
+
+            background:#f2f2f2;
+
+            overflow:hidden;
           ">
 
         <h3>${p.name || "No Name"}</h3>
@@ -256,7 +270,6 @@ function openModal(product) {
 
       product.link || "#";
 
-  // 🖼 GALLERY
   const gallery =
     document.getElementById("modalGallery");
 
@@ -349,7 +362,6 @@ function performSearch() {
 
   render(filtered);
 
-  // 🔥 AUTO SCROLL
   document.getElementById("productGrid")
     .scrollIntoView({
 
