@@ -32,38 +32,97 @@ body {
   margin: 0;
 }
 
-/* 🔥 SIMPLE HERO */
+/* 🔥 PREMIUM HERO */
 .hero {
   background: #FFD600;
 
-  padding: 30px 24px;
+  padding: 50px 24px 120px;
 
   border-bottom: 3px solid black;
+
+  position: relative;
+
+  overflow: hidden;
 }
 
-.hero h2 {
-  margin-top: 0;
+.hero-content {
+  max-width: 720px;
 
-  font-size: 42px;
-
-  line-height: 1.1;
+  position: relative;
+  z-index: 2;
 }
 
-.hero p {
-  font-size: 18px;
+.hero-tag {
+  display: inline-block;
+
+  background: black;
+  color: yellow;
+
+  padding: 8px 14px;
+
+  font-size: 12px;
+  font-weight: bold;
+
+  letter-spacing: 4px;
+
+  margin-bottom: 24px;
 }
 
-/* 🔍 SEARCH */
+.hero-title {
+  font-size: 92px;
+  font-weight: 900;
+
+  line-height: 0.9;
+
+  margin: 0 0 24px;
+
+  text-transform: uppercase;
+}
+
+.hero-sub {
+  font-size: 20px;
+
+  max-width: 620px;
+
+  line-height: 1.5;
+}
+
+/* 🔥 BACKGROUND WORD */
+.hero-bg {
+  position: absolute;
+
+  right: 30px;
+  top: 20px;
+
+  font-size: 220px;
+  font-weight: 900;
+
+  color: rgba(0,0,0,0.05);
+
+  line-height: 1;
+
+  user-select: none;
+
+  pointer-events: none;
+}
+
+/* 🔍 FIXED SEARCH */
 .search-wrapper {
-  padding: 20px 24px;
 
-  position: sticky;
+  position: fixed;
 
-  top: 0;
+  top: 20px;
 
-  z-index: 999;
+  left: 50%;
 
-  background: #fafafa;
+  transform: translateX(-50%);
+
+  z-index: 9999;
+
+  width: 620px;
+
+  max-width: calc(100vw - 40px);
+
 }
 
 .hero-search {
@@ -71,8 +130,7 @@ body {
 
   align-items: stretch;
 
-  width: 620px;
-  max-width: 100%;
+  width: 100%;
 
   border: 3px solid black;
 
@@ -93,6 +151,8 @@ body {
   font-weight: bold;
 
   outline: none;
+
+  min-width: 0;
 }
 
 .search-btn {
@@ -108,9 +168,12 @@ body {
 
   cursor: pointer;
 
+  white-space: nowrap;
+
   transition:
     background 0.15s ease,
-    color 0.15s ease;
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .search-btn:hover {
@@ -434,10 +497,31 @@ body {
   background: black;
 }
 
+/* 📱 MOBILE */
+@media (max-width: 900px) {
+
+  .hero-title {
+    font-size: 64px;
+  }
+
+  .hero-bg {
+    font-size: 120px;
+  }
+
+}
+
 @media (max-width: 700px) {
 
-  .hero h2 {
-    font-size: 30px;
+  .hero-title {
+    font-size: 46px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+  }
+
+  .hero-bg {
+    display: none;
   }
 
   .hero-search {
@@ -462,22 +546,7 @@ body {
 
 </div>
 
-<!-- 🔥 HERO -->
-<div class="hero">
-
-  <h2>
-    Deals | links | shopping <br>
-    Come steal my finds 🎀
-  </h2>
-
-  <p>
-    Top picks across Electronics,
-    Fashion, Home, Health & More.
-  </p>
-
-</div>
-
-<!-- 🔍 SEARCH -->
+<!-- 🔍 FIXED SEARCH -->
 <div class="search-wrapper">
 
   <div class="hero-search">
@@ -489,6 +558,33 @@ body {
             class="search-btn">
       SEARCH
     </button>
+
+  </div>
+
+</div>
+
+<!-- 🔥 HERO -->
+<div class="hero">
+
+  <div class="hero-bg">
+    HOT
+  </div>
+
+  <div class="hero-content">
+
+    <div class="hero-tag">
+      BEST DEALS CURATED DAILY
+    </div>
+
+    <h1 class="hero-title">
+      COME STEAL <br>
+      MY FINDS 🎀
+    </h1>
+
+    <p class="hero-sub">
+      Top picks across Electronics,
+      Fashion, Home, Health & More.
+    </p>
 
   </div>
 
