@@ -35,7 +35,7 @@ body {
 .hero {
   background: #FFD600;
 
-  padding: 50px 24px 40px;
+  padding: 50px 24px 80px;
 
   border-bottom: 3px solid black;
 
@@ -84,8 +84,6 @@ body {
   max-width: 620px;
 
   line-height: 1.5;
-
-  margin-bottom: 30px;
 }
 
 /* 🔥 BACKGROUND WORD */
@@ -107,24 +105,31 @@ body {
   pointer-events: none;
 }
 
-/* 🔍 STICKY SEARCH WRAPPER */
-.sticky-search {
+/* 🔍 FLOATING SEARCH */
+.search-floating-wrapper {
+
   position: sticky;
 
-  top: 14px;
+  top: 18px;
 
   z-index: 999;
 
   width: fit-content;
+
+  margin-left: 24px;
+
+  margin-top: -40px;
+
 }
 
-/* 🔍 SEARCH */
+/* 🔍 SEARCH BAR */
 .hero-search {
   display: flex;
 
   align-items: stretch;
 
-  max-width: 620px;
+  width: 620px;
+  max-width: calc(100vw - 48px);
 
   border: 3px solid black;
 
@@ -132,10 +137,6 @@ body {
 
   box-shadow:
     6px 6px 0 black;
-
-  position: relative;
-
-  z-index: 5;
 }
 
 .hero-search input {
@@ -293,7 +294,7 @@ body {
 
   gap: 14px;
 
-  padding: 0 20px 24px;
+  padding: 40px 20px 24px;
 
   flex-wrap: wrap;
 }
@@ -442,7 +443,7 @@ body {
 
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
   .hero-title {
     font-size: 46px;
@@ -454,6 +455,8 @@ body {
 
   .hero-search {
     flex-direction: column;
+
+    width: calc(100vw - 48px);
   }
 
   .search-btn {
@@ -502,22 +505,22 @@ body {
       Fashion, Home, Health & More.
     </p>
 
-    <!-- 🔍 STICKY SEARCH -->
-    <div class="sticky-search">
+  </div>
 
-      <div class="hero-search">
+</div>
 
-        <input id="searchInput"
-               placeholder="Search products, brands, categories...">
+<!-- 🔍 FLOATING SEARCH -->
+<div class="search-floating-wrapper">
 
-        <button id="searchBtn"
-                class="search-btn">
-          SEARCH
-        </button>
+  <div class="hero-search">
 
-      </div>
+    <input id="searchInput"
+           placeholder="Search products, brands, categories...">
 
-    </div>
+    <button id="searchBtn"
+            class="search-btn">
+      SEARCH
+    </button>
 
   </div>
 
