@@ -26,115 +26,53 @@ body {
   color: yellow;
 
   padding: 16px 24px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .nav h1 {
   margin: 0;
 }
 
-/* 🔥 HERO */
+/* 🔥 SIMPLE HERO */
 .hero {
   background: #FFD600;
 
-  padding: 50px 24px 80px;
+  padding: 30px 24px;
 
   border-bottom: 3px solid black;
-
-  position: relative;
-
-  overflow: hidden;
 }
 
-.hero-content {
-  max-width: 720px;
+.hero h2 {
+  margin-top: 0;
 
-  position: relative;
-  z-index: 2;
+  font-size: 42px;
+
+  line-height: 1.1;
 }
 
-.hero-tag {
-  display: inline-block;
-
-  background: black;
-  color: yellow;
-
-  padding: 8px 14px;
-
-  font-size: 12px;
-  font-weight: bold;
-
-  letter-spacing: 4px;
-
-  margin-bottom: 24px;
+.hero p {
+  font-size: 18px;
 }
 
-.hero-title {
-  font-size: 92px;
-  font-weight: 900;
-
-  line-height: 0.9;
-
-  margin: 0 0 24px;
-
-  text-transform: uppercase;
-}
-
-.hero-sub {
-  font-size: 20px;
-
-  max-width: 620px;
-
-  line-height: 1.5;
-}
-
-/* 🔥 BACKGROUND WORD */
-.hero-bg {
-  position: absolute;
-
-  right: 30px;
-  top: 20px;
-
-  font-size: 220px;
-  font-weight: 900;
-
-  color: rgba(0,0,0,0.05);
-
-  line-height: 1;
-
-  user-select: none;
-
-  pointer-events: none;
-}
-
-/* 🔍 FLOATING SEARCH */
-.search-floating-wrapper {
+/* 🔍 SEARCH */
+.search-wrapper {
+  padding: 20px 24px;
 
   position: sticky;
 
-  top: 18px;
+  top: 0;
 
   z-index: 999;
 
-  width: fit-content;
-
-  margin-left: 24px;
-
-  margin-top: -40px;
-
+  background: #fafafa;
 }
 
-/* 🔍 SEARCH BAR */
 .hero-search {
   display: flex;
 
   align-items: stretch;
 
   width: 620px;
-  max-width: calc(100vw - 48px);
+  max-width: 100%;
 
   border: 3px solid black;
 
@@ -149,14 +87,12 @@ body {
 
   border: none;
 
-  padding: 20px;
+  padding: 18px;
 
   font-size: 18px;
   font-weight: bold;
 
   outline: none;
-
-  min-width: 0;
 }
 
 .search-btn {
@@ -172,12 +108,9 @@ body {
 
   cursor: pointer;
 
-  white-space: nowrap;
-
   transition:
     background 0.15s ease,
-    color 0.15s ease,
-    transform 0.15s ease;
+    color 0.15s ease;
 }
 
 .search-btn:hover {
@@ -208,8 +141,6 @@ body {
   gap: 20px;
 
   padding: 20px;
-
-  overflow-x: hidden;
 }
 
 /* 🃏 CARDS */
@@ -227,9 +158,6 @@ body {
   cursor: pointer;
 
   overflow: hidden;
-
-  min-width: 0;
-
 }
 
 .card {
@@ -254,13 +182,21 @@ body {
 
 }
 
-.deal-card h4,
-.deal-card p,
-.card h3,
-.card p {
-  color: black;
+.card img,
+.deal-card img {
+  width: 100%;
 
-  word-break: break-word;
+  object-fit: cover;
+
+  display: block;
+}
+
+.card img {
+  height: 220px;
+}
+
+.deal-card img {
+  height: 100px;
 }
 
 /* 🟡 BUTTONS */
@@ -307,7 +243,7 @@ body {
 
   gap: 14px;
 
-  padding: 40px 20px 24px;
+  padding: 20px;
 
   flex-wrap: wrap;
 }
@@ -336,9 +272,7 @@ body {
   transition:
     min-width 0.25s ease,
     transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease,
-    color 0.15s ease;
+    box-shadow 0.15s ease;
 
   white-space: nowrap;
 }
@@ -440,6 +374,38 @@ body {
   display: block;
 }
 
+/* ⬅️➡️ SLIDER BUTTONS */
+.slider-nav {
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background: rgba(0,0,0,0.8);
+
+  color: yellow;
+
+  border: none;
+
+  width: 44px;
+  height: 44px;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  z-index: 5;
+}
+
+.prev-btn {
+  left: 10px;
+}
+
+.next-btn {
+  right: 10px;
+}
+
 /* 🔘 DOTS */
 .slider-controls {
   display: flex;
@@ -462,57 +428,24 @@ body {
   border: 2px solid black;
 
   cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease;
 }
 
 .slider-dot.active {
   background: black;
 }
 
-.slider-dot:hover {
-
-  transform: scale(1.2);
-
-}
-
-/* 📱 MOBILE */
-@media (max-width: 900px) {
-
-  .hero-title {
-    font-size: 64px;
-  }
-
-  .hero-bg {
-    font-size: 120px;
-  }
-
-}
-
 @media (max-width: 700px) {
 
-  .hero-title {
-    font-size: 46px;
-  }
-
-  .hero-sub {
-    font-size: 16px;
+  .hero h2 {
+    font-size: 30px;
   }
 
   .hero-search {
     flex-direction: column;
-
-    width: calc(100vw - 48px);
   }
 
   .search-btn {
     height: 60px;
-  }
-
-  .hero-bg {
-    display: none;
   }
 
 }
@@ -532,32 +465,20 @@ body {
 <!-- 🔥 HERO -->
 <div class="hero">
 
-  <div class="hero-bg">
-    HOT
-  </div>
+  <h2>
+    Deals | links | shopping <br>
+    Come steal my finds 🎀
+  </h2>
 
-  <div class="hero-content">
-
-    <div class="hero-tag">
-      BEST DEALS CURATED DAILY
-    </div>
-
-    <h1 class="hero-title">
-      COME STEAL <br>
-      MY FINDS 🎀
-    </h1>
-
-    <p class="hero-sub">
-      Top picks across Electronics,
-      Fashion, Home, Health & More.
-    </p>
-
-  </div>
+  <p>
+    Top picks across Electronics,
+    Fashion, Home, Health & More.
+  </p>
 
 </div>
 
-<!-- 🔍 FLOATING SEARCH -->
-<div class="search-floating-wrapper">
+<!-- 🔍 SEARCH -->
+<div class="search-wrapper">
 
   <div class="hero-search">
 
@@ -630,9 +551,19 @@ body {
     <!-- 🎞 SLIDER -->
     <div class="modal-slider">
 
+      <button class="slider-nav prev-btn"
+              id="prevSlide">
+        ‹
+      </button>
+
       <div id="sliderTrack"
            class="slider-track">
       </div>
+
+      <button class="slider-nav next-btn"
+              id="nextSlide">
+        ›
+      </button>
 
     </div>
 
