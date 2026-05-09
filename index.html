@@ -78,10 +78,6 @@ body {
   text-transform: uppercase;
 }
 
-.hero-title span {
-  color: inherit;
-}
-
 .hero-sub {
   font-size: 20px;
 
@@ -92,7 +88,37 @@ body {
   margin-bottom: 30px;
 }
 
-/* 🔍 SEARCH AREA */
+/* 🔥 BACKGROUND WORD */
+.hero-bg {
+  position: absolute;
+
+  right: 30px;
+  top: 20px;
+
+  font-size: 220px;
+  font-weight: 900;
+
+  color: rgba(0,0,0,0.05);
+
+  line-height: 1;
+
+  user-select: none;
+
+  pointer-events: none;
+}
+
+/* 🔍 STICKY SEARCH WRAPPER */
+.sticky-search {
+  position: sticky;
+
+  top: 14px;
+
+  z-index: 999;
+
+  width: fit-content;
+}
+
+/* 🔍 SEARCH */
 .hero-search {
   display: flex;
 
@@ -107,11 +133,9 @@ body {
   box-shadow:
     6px 6px 0 black;
 
-  position: sticky;
+  position: relative;
 
-  top: 16px;
-
-  z-index: 999;
+  z-index: 5;
 }
 
 .hero-search input {
@@ -151,25 +175,6 @@ body {
   background: yellow;
   color: black;
 
-}
-
-/* 🔥 BIG BACKGROUND WORD */
-.hero-bg {
-  position: absolute;
-
-  right: 30px;
-  top: 20px;
-
-  font-size: 220px;
-  font-weight: 900;
-
-  color: rgba(0,0,0,0.05);
-
-  line-height: 1;
-
-  user-select: none;
-
-  pointer-events: none;
 }
 
 /* 🔥 DEALS */
@@ -244,7 +249,7 @@ body {
   color: black;
 }
 
-/* 🟡 BUY BUTTONS */
+/* 🟡 BUTTONS */
 .buy,
 .deal-card .buy {
   background: black;
@@ -282,19 +287,7 @@ body {
 
 }
 
-.buy:active,
-.deal-card .buy:active {
-
-  transform:
-    translate(-1px, -1px)
-    scale(0.98);
-
-  box-shadow:
-    1px 1px 0px black;
-
-}
-
-/* 🧭 CATEGORY TABS */
+/* 🧭 CATEGORYS */
 .tabs {
   display: flex;
 
@@ -488,7 +481,7 @@ body {
 <!-- 🔥 HERO -->
 <div class="hero">
 
-  <!-- BACKGROUND TEXT -->
+  <!-- BACKGROUND WORD -->
   <div class="hero-bg">
     HOT
   </div>
@@ -509,16 +502,20 @@ body {
       Fashion, Home, Health & More.
     </p>
 
-    <!-- 🔍 SEARCH -->
-    <div class="hero-search">
+    <!-- 🔍 STICKY SEARCH -->
+    <div class="sticky-search">
 
-      <input id="searchInput"
-             placeholder="Search products, brands, categories...">
+      <div class="hero-search">
 
-      <button id="searchBtn"
-              class="search-btn">
-        SEARCH
-      </button>
+        <input id="searchInput"
+               placeholder="Search products, brands, categories...">
+
+        <button id="searchBtn"
+                class="search-btn">
+          SEARCH
+        </button>
+
+      </div>
 
     </div>
 
@@ -529,7 +526,7 @@ body {
 <!-- 🔥 DEALS -->
 <div id="dealSection"></div>
 
-<!-- 🧭 CATEGORIES -->
+<!-- 🧭 CATEGORYS -->
 <div id="categoryTabs"
      class="tabs">
 
