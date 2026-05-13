@@ -322,14 +322,19 @@ form.addEventListener(
         ).value,
 
       deal:
-        document.getElementById(
-          "deal"
-        ).value === "true",
+  document.getElementById(
+    "deal"
+  ).value === "true",
 
-      images
+dealEndsAt:
 
-    };
+  document.getElementById(
+    "deal"
+  ).value === "true"
 
+    ? Date.now() + 86400000
+
+    : null,
     const editId =
       document.getElementById(
         "editId"
