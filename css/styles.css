@@ -315,3 +315,22 @@ body {
     height:220px;
   }
 }
+.deal-card {
+  padding: 16px;
+  text-align: left;
+  width: 100%;
+  max-width: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.deals-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:24px;
+  width:100%;
+  align-items:start;
+  margin-top:20px;
+}
