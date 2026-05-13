@@ -39,11 +39,7 @@ function renderDeals(productsList) {
 
       <h2>🔥 DEALS OF THE DAY</h2>
 
-      <div style="
-        display:flex;
-        gap:20px;
-        flex-wrap:wrap;
-      ">
+     <div class="deals-grid">
 
         ${deals.map(p => {
 
