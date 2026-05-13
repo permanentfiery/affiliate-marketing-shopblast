@@ -1,113 +1,34 @@
-import { auth, storage } from "./firebase.js";
-
 import {
-  getProducts,
   addProduct,
-  updateProduct,
-  deleteProduct
+  getProducts,
+  deleteProduct,
+  updateProduct
 } from "./db.js";
 
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const form =
+  document.getElementById(
+    "productForm"
+  );
 
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+const productsContainer =
+  document.getElementById(
+    "adminProducts"
+  );
 
-let editingId = null;
-let existingImages = [];
+const imageContainer =
+  document.getElementById(
+    "imageContainer"
+  );
 
-document.addEventListener("DOMContentLoaded", () => {
+const addImageBtn =
+  document.getElementById(
+    "addImageBtn"
+  );
 
-  const loginBtn =
-    document.getElementById("loginBtn");
-
-  const logoutBtn =
-    document.getElementById("logoutBtn");
-
-  const saveBtn =
-    document.getElementById("saveBtn");
-
-  const addImageBtn =
-    document.getElementById("addImageBtn");
-
-  const addUrlBtn =
-    document.getElementById("addUrlBtn");
-
-  const imageInputs =
-    document.getElementById("imageInputs");
-
-  const urlInputs =
-    document.getElementById("urlInputs");
-
-  const previewGrid =
-    document.getElementById("previewGrid");
-
-  const loginBox =
-    document.getElementById("loginBox");
-
-  const adminPanel =
-    document.getElementById("adminPanel");
-
-  const productList =
-    document.getElementById("productList");
-
-  // 🔐 LOGIN
-  loginBtn.addEventListener("click", async () => {
-
-    try {
-
-      await signInWithEmailAndPassword(
-        auth,
-        document.getElementById("email").value,
-        document.getElementById("password").value
-      );
-
-    } catch (err) {
-
-      alert(err.message);
-
-    }
-
-  });
-
-  // 🚪 LOGOUT
-  logoutBtn.addEventListener("click", async () => {
-
-    await signOut(auth);
-
-    location.reload();
-
-  });
-
-  // 👤 AUTH
-  onAuthStateChanged(auth, user => {
-
-    if (user) {
-
-      loginBox.style.display = "none";
-
-      adminPanel.style.display = "block";
-
-      loadProducts();
-
-    } else {
-
-      loginBox.style.display = "block";
-
-      adminPanel.style.display = "none";
-
-    }
-
-  });
-
-  // ➕ ADD LOCAL IMAGE ROW
-  addImageBtn.addEventListener("click", () => {
+// ➕ ADD IMAGE FIELD
+addImageBtn.addEventListener(
+  "click",
+  () => {
 
     const row =
       document.createElement("div");
@@ -116,452 +37,326 @@ document.addEventListener("DOMContentLoaded", () => {
 
     row.innerHTML = `
 
-      <input type="file"
-             class="imageInput"
-             accept="image/*">
+      <input type="url"
+             class="image-input"
+             placeholder="Image URL">
 
       <button type="button"
-              class="removeImageBtn">
+              class="remove-btn">
         Remove
       </button>
 
     `;
 
-    imageInputs.appendChild(row);
-
-    attachPreview(
-      row.querySelector(".imageInput")
-    );
-
-    attachRemoveButtons();
-
-  });
-
-  // ➕ ADD URL IMAGE ROW
-  addUrlBtn.addEventListener("click", () => {
-
-    const row =
-      document.createElement("div");
-
-    row.className = "url-row";
-
-    row.innerHTML = `
-
-      <input type="text"
-             class="urlImageInput"
-             placeholder="Paste image URL">
-
-      <button type="button"
-              class="removeUrlBtn">
-        Remove
-      </button>
-
-    `;
-
-    urlInputs.appendChild(row);
-
-    attachRemoveButtons();
-
-  });
-
-  // ❌ REMOVE BUTTONS
-  function attachRemoveButtons() {
-
-    document.querySelectorAll(".removeImageBtn")
-      .forEach(btn => {
-
-        btn.onclick = () => {
-
-          const row =
-            btn.closest(".image-row");
-
-          if (
-            document.querySelectorAll(".image-row")
-              .length > 1
-          ) {
-
-            row.remove();
-
-          }
-
-        };
-
-    });
-
-    document.querySelectorAll(".removeUrlBtn")
-      .forEach(btn => {
-
-        btn.onclick = () => {
-
-          const row =
-            btn.closest(".url-row");
-
-          if (
-            document.querySelectorAll(".url-row")
-              .length > 1
-          ) {
-
-            row.remove();
-
-          }
-
-        };
-
-    });
+    imageContainer.appendChild(row);
 
   }
+);
 
-  attachRemoveButtons();
+// ❌ REMOVE IMAGE FIELD
+imageContainer.addEventListener(
+  "click",
+  e => {
 
-  // 🖼 PREVIEW
-  function attachPreview(input) {
+    if (
+      e.target.classList.contains(
+        "remove-btn"
+      )
+    ) {
 
-    input.addEventListener("change", () => {
-
-      previewGrid.innerHTML = "";
-
-      document.querySelectorAll(".imageInput")
-        .forEach(inp => {
-
-          const file = inp.files[0];
-
-          if (!file) return;
-
-          const img =
-            document.createElement("img");
-
-          img.src =
-            URL.createObjectURL(file);
-
-          previewGrid.appendChild(img);
-
-      });
-
-    });
-
-  }
-
-  document.querySelectorAll(".imageInput")
-    .forEach(attachPreview);
-
-  // ☁️ UPLOAD IMAGES
-  async function uploadImages() {
-
-    const urls = [...existingImages];
-
-    // 🌐 URL IMAGES
-    document.querySelectorAll(".urlImageInput")
-      .forEach(input => {
-
-        const value =
-          input.value.trim();
-
-        if (value) {
-          urls.push(value);
-        }
-
-    });
-
-    // 📁 LOCAL FILES
-    const inputs =
-      document.querySelectorAll(".imageInput");
-
-    for (const input of inputs) {
-
-      const file = input.files[0];
-
-      if (!file) continue;
-
-      const fileRef = ref(
-        storage,
-        `products/${Date.now()}-${file.name}`
-      );
-
-      await uploadBytes(fileRef, file);
-
-      const url =
-        await getDownloadURL(fileRef);
-
-      urls.push(url);
+      e.target.parentElement.remove();
 
     }
 
-    return urls;
+});
 
-  }
+// 📦 LOAD PRODUCTS
+async function loadProducts() {
 
-  // 💾 SAVE PRODUCT
-  saveBtn.addEventListener("click", async () => {
+  const products =
+    await getProducts();
 
-    saveBtn.textContent = "Uploading...";
+  productsContainer.innerHTML =
+    products.map(product => {
 
-    try {
+      const image =
 
-      const imageUrls =
-        await uploadImages();
+        (product.images &&
+         product.images.length > 0)
 
-      const product = {
+        ? product.images[0]
 
-        name:
-          document.getElementById("name")
-            .value.trim(),
+        : (product.image || "");
 
-        price:
-          Math.round(
-            parseFloat(
-              document.getElementById("price")
-                .value
-            ) * 100
-          ),
+      return `
 
-        link:
-          document.getElementById("link")
-            .value.trim(),
+        <div class="admin-card">
 
-        description:
-          document.getElementById("description")
-            .value.trim(),
+          <img src="${image}">
 
-        category:
-          document.getElementById("category")
-            .value,
+          <h3>${product.name}</h3>
 
-        deal:
-          document.getElementById("deal")
-            .value === "yes",
+          <p>
+            ₹${(
+              product.price
+            ).toFixed(2)}
+          </p>
 
-        images:
-          imageUrls
+          <div class="admin-actions">
 
-      };
-
-      // ✏️ UPDATE
-      if (editingId) {
-
-        await updateProduct(
-          editingId,
-          product
-        );
-
-        alert("Product updated");
-
-        editingId = null;
-
-      }
-
-      // ➕ ADD
-      else {
-
-        await addProduct(product);
-
-        alert("Product added");
-
-      }
-
-      clearForm();
-
-      loadProducts();
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert(err.message);
-
-    }
-
-    saveBtn.textContent = "Save Product";
-
-  });
-
-  // 📦 LOAD PRODUCTS
-  async function loadProducts() {
-
-    const products =
-      await getProducts();
-
-    productList.innerHTML =
-      products.map(p => {
-
-        const img =
-          p.images?.[0] ||
-          "https://via.placeholder.com/80";
-
-        return `
-          <div class="product-item">
-
-            <img
-              src="${img}"
-
-              style="
-                width:80px;
-                height:80px;
-                object-fit:cover;
-                border:2px solid black;
-              ">
-
-            <h3>${p.name}</h3>
-
-            <p>
-              ₹${(p.price / 100).toFixed(2)}
-            </p>
-
-            <p>
-              ${p.category}
-            </p>
-
-            <button class="editBtn"
-                    data-id="${p.id}">
+            <button
+              class="edit-btn"
+              data-id="${product.id}">
               Edit
             </button>
 
-            <button class="deleteBtn"
-                    data-id="${p.id}"
-
-                    style="
-                      background:red;
-                      color:white;
-                    ">
+            <button
+              class="delete-btn"
+              data-id="${product.id}">
               Delete
             </button>
 
           </div>
-        `;
+
+        </div>
+
+      `;
 
     }).join("");
 
-    // ✏️ EDIT
-    document.querySelectorAll(".editBtn")
-      .forEach(btn => {
+  // ✏️ EDIT
+  document.querySelectorAll(
+    ".edit-btn"
+  ).forEach(btn => {
 
-        btn.addEventListener("click",
-          async () => {
+    btn.addEventListener(
+      "click",
+      async () => {
 
-          const id =
-            btn.dataset.id;
+        const products =
+          await getProducts();
 
-          const products =
-            await getProducts();
+        const product =
+          products.find(
+            p => p.id === btn.dataset.id
+          );
 
-          const p =
-            products.find(x => x.id === id);
+        if (!product) return;
 
-          if (!p) return;
+        document.getElementById(
+          "editId"
+        ).value = product.id;
 
-          editingId = id;
+        document.getElementById(
+          "name"
+        ).value = product.name || "";
 
-          existingImages =
-            p.images || [];
+        document.getElementById(
+          "price"
+        ).value = product.price || "";
 
-          document.getElementById("name")
-            .value = p.name || "";
+        document.getElementById(
+          "originalPrice"
+        ).value =
+          product.originalPrice || "";
 
-          document.getElementById("price")
-            .value =
-              (p.price / 100).toFixed(2);
+        document.getElementById(
+          "category"
+        ).value =
+          product.category || "";
 
-          document.getElementById("link")
-            .value = p.link || "";
+        document.getElementById(
+          "description"
+        ).value =
+          product.description || "";
 
-          document.getElementById("description")
-            .value =
-              p.description || "";
+        document.getElementById(
+          "link"
+        ).value =
+          product.link || "";
 
-          document.getElementById("category")
-            .value =
-              p.category ||
-              "Electronics & Gadgets";
+        document.getElementById(
+          "deal"
+        ).value =
+          product.deal
+          ? "true"
+          : "false";
 
-          document.getElementById("deal")
-            .value =
-              p.deal ? "yes" : "no";
+        imageContainer.innerHTML = "";
 
-          previewGrid.innerHTML = "";
+        const images =
 
-          existingImages.forEach(imgUrl => {
+          (product.images &&
+           product.images.length > 0)
 
-            const img =
-              document.createElement("img");
+          ? product.images
 
-            img.src = imgUrl;
+          : (product.image
+              ? [product.image]
+              : []);
 
-            previewGrid.appendChild(img);
+        images.forEach(img => {
 
-          });
+          const row =
+            document.createElement(
+              "div"
+            );
+
+          row.className =
+            "image-row";
+
+          row.innerHTML = `
+
+            <input type="url"
+                   class="image-input"
+                   value="${img}">
+
+            <button type="button"
+                    class="remove-btn">
+              Remove
+            </button>
+
+          `;
+
+          imageContainer.appendChild(
+            row
+          );
 
         });
 
-    });
+        window.scrollTo({
 
-    // ❌ DELETE
-    document.querySelectorAll(".deleteBtn")
-      .forEach(btn => {
+          top: 0,
 
-        btn.addEventListener("click",
-          async () => {
-
-          const id =
-            btn.dataset.id;
-
-          if (!confirm("Delete product?"))
-            return;
-
-          await deleteProduct(id);
-
-          loadProducts();
+          behavior: "smooth"
 
         });
 
+      }
+    );
+
+  });
+
+  // ❌ DELETE
+  document.querySelectorAll(
+    ".delete-btn"
+  ).forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      async () => {
+
+        await deleteProduct(
+          btn.dataset.id
+        );
+
+        loadProducts();
+
+      }
+    );
+
+  });
+
+}
+
+// 💾 SAVE
+form.addEventListener(
+  "submit",
+  async e => {
+
+    e.preventDefault();
+
+    const imageInputs =
+      document.querySelectorAll(
+        ".image-input"
+      );
+
+    const images = [];
+
+    imageInputs.forEach(input => {
+
+      if (input.value.trim()) {
+
+        images.push(
+          input.value.trim()
+        );
+
+      }
+
     });
 
+    const product = {
+
+      name:
+        document.getElementById(
+          "name"
+        ).value,
+
+      price:
+        Number(
+          document.getElementById(
+            "price"
+          ).value
+        ),
+
+      originalPrice:
+        Number(
+          document.getElementById(
+            "originalPrice"
+          ).value
+        ) || null,
+
+      category:
+        document.getElementById(
+          "category"
+        ).value,
+
+      description:
+        document.getElementById(
+          "description"
+        ).value,
+
+      link:
+        document.getElementById(
+          "link"
+        ).value,
+
+      deal:
+        document.getElementById(
+          "deal"
+        ).value === "true",
+
+      images
+
+    };
+
+    const editId =
+      document.getElementById(
+        "editId"
+      ).value;
+
+    if (editId) {
+
+      await updateProduct(
+        editId,
+        product
+      );
+
+    } else {
+
+      await addProduct(product);
+
+    }
+
+    form.reset();
+
+    document.getElementById(
+      "editId"
+    ).value = "";
+
+    loadProducts();
+
   }
+);
 
-  // 🧹 CLEAR FORM
-  function clearForm() {
-
-    existingImages = [];
-
-    previewGrid.innerHTML = "";
-
-    imageInputs.innerHTML = `
-
-      <div class="image-row">
-
-        <input type="file"
-               class="imageInput"
-               accept="image/*">
-
-        <button type="button"
-                class="removeImageBtn">
-          Remove
-        </button>
-
-      </div>
-
-    `;
-
-    urlInputs.innerHTML = `
-
-      <div class="url-row">
-
-        <input type="text"
-               class="urlImageInput"
-               placeholder="Paste image URL">
-
-        <button type="button"
-                class="removeUrlBtn">
-          Remove
-        </button>
-
-      </div>
-
-    `;
-
-    document.querySelectorAll(".imageInput")
-      .forEach(attachPreview);
-
-    attachRemoveButtons();
-
-  }
-
-});
+loadProducts();
