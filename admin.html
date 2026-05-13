@@ -2,250 +2,313 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
 <title>StealMyFinds Admin</title>
 
 <style>
+
 body {
+
   font-family: Arial;
+
   background: #fafafa;
+
   padding: 20px;
+
 }
 
-.box {
-  max-width: 650px;
-  margin: auto;
-  border: 3px solid black;
-  padding: 20px;
+form {
+
   background: white;
+
+  border: 3px solid black;
+
+  padding: 20px;
+
+  max-width: 700px;
+
+}
+
+label {
+
+  display: block;
+
+  margin-top: 16px;
+
+  font-weight: bold;
+
 }
 
 input,
-select,
-textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border: 2px solid black;
-  box-sizing: border-box;
-}
+textarea,
+select {
 
-textarea {
-  min-height: 120px;
+  width: 100%;
+
+  padding: 12px;
+
+  margin-top: 6px;
+
+  border: 2px solid black;
+
 }
 
 button {
-  padding: 10px 14px;
-  border: 2px solid black;
+
+  margin-top: 20px;
+
   background: black;
+
   color: yellow;
-  cursor: pointer;
+
+  border: none;
+
+  padding: 14px 18px;
+
   font-weight: bold;
 
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  cursor: pointer;
+
 }
 
-button:hover {
-  transform: translate(-3px, -3px);
+.image-row {
 
-  box-shadow:
-    3px 3px 0 black;
-}
-
-.image-row,
-.url-row {
   display: flex;
+
   gap: 10px;
-  margin-bottom: 10px;
+
+  margin-top: 10px;
+
 }
 
-.removeImageBtn,
-.removeUrlBtn {
+.image-row input {
+  flex: 1;
+}
+
+.remove-btn {
+
   background: red;
+
   color: white;
-  min-width: 90px;
+
 }
 
-.preview-grid {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 12px;
+.admin-products {
+
+  margin-top: 40px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(220px,1fr));
+
+  gap: 20px;
+
 }
 
-.preview-grid img {
-  width: 80px;
-  height: 80px;
+.admin-card {
+
+  background: white;
+
+  border: 3px solid black;
+
+  padding: 14px;
+
+}
+
+.admin-card img {
+
+  width: 100%;
+
+  height: 160px;
+
   object-fit: cover;
-  border: 2px solid black;
+
 }
 
-.product-item {
-  border: 2px solid black;
-  padding: 12px;
-  margin-top: 12px;
+.admin-actions {
+
+  display: flex;
+
+  gap: 10px;
+
 }
+
+.delete-btn {
+
+  background: red;
+
+}
+
+/* 🍞 TOAST */
+.toast {
+
+  position: fixed;
+
+  bottom: 20px;
+
+  right: 20px;
+
+  background: black;
+
+  color: yellow;
+
+  border: 3px solid yellow;
+
+  padding: 14px 18px;
+
+  font-weight: bold;
+
+  z-index: 999999;
+
+  opacity: 0;
+
+  transform: translateY(20px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+
+}
+
+.toast.show {
+
+  opacity: 1;
+
+  transform: translateY(0);
+
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<h1>STEALMYFINDS ADMIN</h1>
 
-  <h1>STEALMYFINDS ADMIN</h1>
+<form id="productForm">
 
-  <!-- LOGIN -->
-  <div id="loginBox">
+  <input type="hidden"
+         id="editId">
 
-    <input id="email" placeholder="Email">
+  <label>Product Name</label>
 
-    <input id="password"
-           type="password"
-           placeholder="Password">
+  <input type="text"
+         id="name"
+         required>
 
-    <button id="loginBtn">
-      Login
-    </button>
+  <label>Discounted Price</label>
 
-  </div>
+  <input type="number"
+         id="price"
+         step="0.01"
+         required>
 
-  <!-- ADMIN -->
-  <div id="adminPanel"
-       style="display:none;">
+  <label>Original Price</label>
 
-    <h2>Add / Edit Product</h2>
+  <input type="number"
+         id="originalPrice"
+         step="0.01">
 
-    <input id="name"
-           placeholder="Product Name">
+  <label>Category</label>
 
-    <input id="price"
-           placeholder="Price in rupees">
+  <select id="category">
 
-    <input id="link"
-           placeholder="Affiliate Link">
+    <option>
+      Electronics & Gadgets
+    </option>
 
-    <textarea id="description"
-              placeholder="Description"></textarea>
+    <option>
+      Fashion & Beauty
+    </option>
 
-    <!-- CATEGORY -->
-    <select id="category">
+    <option>
+      Home & Kitchen
+    </option>
 
-      <option value="Electronics & Gadgets">
-        Electronics & Gadgets
-      </option>
+    <option>
+      Health & Fitness
+    </option>
 
-      <option value="Fashion & Beauty">
-        Fashion & Beauty
-      </option>
+    <option>
+      Toys & Games
+    </option>
 
-      <option value="Home & Kitchen">
-        Home & Kitchen
-      </option>
+  </select>
 
-      <option value="Health & Fitness">
-        Health & Fitness
-      </option>
+  <label>Description</label>
 
-      <option value="Books & Courses">
-        Books & Courses
-      </option>
+  <textarea id="description"></textarea>
 
-    </select>
+  <label>Link</label>
 
-    <!-- DEAL -->
-    <select id="deal">
+  <input type="url"
+         id="link">
 
-      <option value="no">
-        Normal Product
-      </option>
+  <label>Deal Of The Day</label>
 
-      <option value="yes">
-        🔥 Deal Product
-      </option>
+  <select id="deal">
 
-    </select>
+    <option value="false">
+      No
+    </option>
 
-    <!-- LOCAL FILES -->
-    <h3>Local Images</h3>
+    <option value="true">
+      Yes
+    </option>
 
-    <div id="imageInputs">
+  </select>
 
-      <div class="image-row">
+  <label>Images</label>
 
-        <input type="file"
-               class="imageInput"
-               accept="image/*">
+  <div id="imageContainer">
 
-        <button type="button"
-                class="removeImageBtn">
-          Remove
-        </button>
+    <div class="image-row">
 
-      </div>
+      <input type="url"
+             class="image-input"
+             placeholder="Image URL">
+
+      <button type="button"
+              class="remove-btn">
+        Remove
+      </button>
 
     </div>
 
-    <button type="button"
-            id="addImageBtn">
-      + Add More Images
-    </button>
-
-    <!-- URL IMAGES -->
-    <h3>Image URLs</h3>
-
-    <div id="urlInputs">
-
-      <div class="url-row">
-
-        <input type="text"
-               class="urlImageInput"
-               placeholder="Paste image URL">
-
-        <button type="button"
-                class="removeUrlBtn">
-          Remove
-        </button>
-
-      </div>
-
-    </div>
-
-    <button type="button"
-            id="addUrlBtn">
-      + Add Image URL
-    </button>
-
-    <!-- PREVIEW -->
-    <div id="previewGrid"
-         class="preview-grid"></div>
-
-    <br>
-
-    <button id="saveBtn">
-      Save Product
-    </button>
-
-    <button id="logoutBtn"
-            style="
-              background:red;
-              color:white;
-            ">
-      Logout
-    </button>
-
-    <hr>
-
-    <h2>Existing Products</h2>
-
-    <div id="productList"></div>
-
   </div>
 
+  <button type="button"
+          id="addImageBtn">
+
+    Add More Images
+
+  </button>
+
+  <br>
+
+  <button type="submit">
+
+    SAVE PRODUCT
+
+  </button>
+
+</form>
+
+<div id="adminProducts"
+     class="admin-products">
 </div>
 
-<script type="module" src="js/admin.js"></script>
+<!-- 🍞 TOAST -->
+<div id="toast"
+     class="toast">
+</div>
+
+<script type="module"
+        src="js/admin.js"></script>
 
 </body>
 </html>
