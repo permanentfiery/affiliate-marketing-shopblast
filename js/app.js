@@ -14,6 +14,14 @@ async function loadProducts() {
 
 }
 
+function isDealExpired(product) {
+
+  if (!product.dealEndsAt) return false;
+
+  return Date.now() > product.dealEndsAt;
+
+}
+
 // 🔥 DEALS OF THE DAY
 function renderDeals(productsList) {
 
