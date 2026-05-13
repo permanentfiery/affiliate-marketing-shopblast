@@ -334,3 +334,9 @@ body {
   align-items:start;
   margin-top:20px;
 }
+.deal-timer{
+  margin:10px 0;
+  font-weight:bold;
+  color:red;
+  font-size:16px;
+}
