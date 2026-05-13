@@ -249,3 +249,69 @@ body {
   box-shadow:
     3px 3px 0 black;
 }
+body {
+  width:100%;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+
+.deal-card img{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  display:block;
+  border:2px solid black;
+  background:#f3f3f3;
+}
+
+.deal-card h4{
+  margin:14px 0 10px;
+  font-size:18px;
+  line-height:1.4;
+  color:#000;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.deal-card p{
+  margin:0 0 14px;
+  font-size:18px;
+  color:#000;
+}
+
+.old-price{
+  text-decoration: line-through;
+  opacity: 0.6;
+  margin-right: 8px;
+}
+
+.discount-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#000;
+  color:yellow;
+  padding:6px 10px;
+  font-weight:bold;
+  z-index:10;
+}
+
+.deal-card .buy{
+  margin-top:auto;
+  width:max-content;
+}
+
+@media(max-width:768px){
+  .deals-grid{
+    grid-template-columns:1fr;
+  }
+
+  .deal-card img{
+    height:220px;
+  }
+}
