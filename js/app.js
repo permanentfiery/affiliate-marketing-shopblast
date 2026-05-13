@@ -3,35 +3,38 @@ import { getProducts } from "./db.js";
 let products = [];
 let activeCategory = "All";
 
+// 📦 LOAD PRODUCTS
 async function loadProducts() {
 
   products = await getProducts();
 
-  renderDeal(products);
-  render(products);
+  renderDeals(products);
+
+  renderProducts(products);
 
 }
 
-// 🔥 DEAL SECTION
-function renderDeal(products) {
+// 🔥 DEALS OF THE DAY
+function renderDeals(productsList) {
 
-  const el =
+  const dealSection =
     document.getElementById("dealSection");
 
-  if (!el) return;
-
   const deals =
-    products.filter(p => p.deal === true);
+    productsList.filter(
+      p => p.deal === true
+    );
 
   if (deals.length === 0) {
 
-    el.innerHTML = "";
+    dealSection.innerHTML = "";
 
     return;
 
   }
 
-  el.innerHTML = `
+  dealSection.innerHTML = `
+
     <div class="deal">
 
       <h2>🔥 DEALS OF THE DAY</h2>
@@ -44,259 +47,379 @@ function renderDeal(products) {
 
         ${deals.map(p => {
 
-          const name =
-            p.name || "No Name";
+          const discountedPrice =
+            Number(p.price)
+              .toFixed(2);
 
-          let price = "0.00";
+          const originalPrice =
+            p.originalPrice || null;
 
-          if (typeof p.price === "number") {
+          const formattedOriginal =
+            originalPrice
+            ? Number(originalPrice)
+                .toFixed(2)
+            : null;
 
-            price =
-              (p.price / 100).toFixed(2);
+          const discountPercent =
+            originalPrice
+            ? Math.round(
+                (
+                  (
+                    originalPrice -
+                    p.price
+                  ) /
+                  originalPrice
+                ) * 100
+              )
+            : null;
 
-          }
+          const imageSrc =
 
-          const image =
-            p.images?.[0] ||
-            p.image ||
-            "https://via.placeholder.com/100";
+            (p.images &&
+             p.images.length > 0)
+
+            ? p.images[0]
+
+            : (p.image || "");
 
           return `
+
             <div class="deal-card"
                  data-id="${p.id}">
 
-              <img src="${image}">
+              ${
+                discountPercent
+                ? `
+                  <div class="discount-badge">
+                    ${discountPercent}% OFF
+                  </div>
+                `
+                : ""
+              }
 
-              <h4>${name}</h4>
+              <img src="${imageSrc}">
+
+              <h4>${p.name}</h4>
 
               <p>
+
+                ${
+                  formattedOriginal
+                  ? `
+                    <span style="
+                      text-decoration:
+                        line-through;
+
+                      opacity:0.6;
+
+                      font-size:13px;
+
+                      margin-right:6px;
+                    ">
+                      ₹${formattedOriginal}
+                    </span>
+                  `
+                  : ""
+                }
+
                 <b>
-                  ${p.category || "General"}
+                  ₹${discountedPrice}
                 </b>
+
               </p>
 
-              <p>
-                <b>₹${price}</b>
-              </p>
+              <a class="buy"
+                 href="${p.link}"
+                 target="_blank">
 
-              <a href="${p.link || '#'}"
-                 target="_blank"
-                 class="buy">
-                 GRAB
+                GRAB DEAL
+
               </a>
 
             </div>
+
           `;
+
         }).join("")}
 
       </div>
+
     </div>
+
   `;
 
   document.querySelectorAll(".deal-card")
     .forEach(card => {
 
-      card.addEventListener("click", () => {
+      card.addEventListener(
+        "click",
+        () => {
 
-        const id =
-          card.dataset.id;
-
-        const product =
-          products.find(p => p.id === id);
-
-        if (product) {
+          const product =
+            products.find(
+              p =>
+                p.id ===
+                card.dataset.id
+            );
 
           openModal(product);
 
         }
+      );
 
-      });
-
-  });
+    });
 
 }
 
 // 🛍 PRODUCT GRID
-function render(list) {
+function renderProducts(productsList) {
 
   const grid =
     document.getElementById("productGrid");
 
-  if (list.length === 0) {
+  grid.innerHTML = productsList.map(p => {
 
-    grid.innerHTML = `
-      <h2>No products found.</h2>
-    `;
+    const discountedPrice =
+      Number(p.price)
+        .toFixed(2);
 
-    return;
+    const originalPrice =
+      p.originalPrice || null;
 
-  }
+    const formattedOriginal =
+      originalPrice
+      ? Number(originalPrice)
+          .toFixed(2)
+      : null;
 
-  grid.innerHTML = list.map(p => {
+    const imageSrc =
 
-    let price = "0.00";
+      (p.images &&
+       p.images.length > 0)
 
-    if (typeof p.price === "number") {
+      ? p.images[0]
 
-      price =
-        (p.price / 100).toFixed(2);
-
-    }
-
-    const image =
-      p.images?.[0] ||
-      p.image ||
-      "https://via.placeholder.com/300";
+      : (p.image || "");
 
     return `
+
       <div class="card"
            data-id="${p.id}">
 
-        <img src="${image}">
+        <img src="${imageSrc}">
 
-        <h3>${p.name || "No Name"}</h3>
+        <h3>${p.name}</h3>
 
         <p>
+
+          ${
+            formattedOriginal
+            ? `
+              <span style="
+                text-decoration:
+                  line-through;
+
+                opacity:0.6;
+
+                font-size:14px;
+
+                margin-right:8px;
+              ">
+                ₹${formattedOriginal}
+              </span>
+            `
+            : ""
+          }
+
           <b>
-            ${p.category || "General"}
+            ₹${discountedPrice}
           </b>
+
         </p>
 
-        <p>₹${price}</p>
+        <a class="buy"
+           href="${p.link}"
+           target="_blank">
 
-        <a href="${p.link || '#'}"
-           target="_blank"
-           class="buy">
-           BUY
+          BUY NOW
+
         </a>
 
       </div>
+
     `;
+
   }).join("");
 
   document.querySelectorAll(".card")
     .forEach(card => {
 
-      card.addEventListener("click", () => {
+      card.addEventListener(
+        "click",
+        () => {
 
-        const id =
-          card.dataset.id;
-
-        const product =
-          products.find(p => p.id === id);
-
-        if (product) {
+          const product =
+            products.find(
+              p =>
+                p.id ===
+                card.dataset.id
+            );
 
           openModal(product);
 
         }
+      );
 
-      });
-
-  });
+    });
 
 }
 
-// 🪟 PRODUCT MODAL
+// 🪟 MODAL
 function openModal(product) {
 
-  document.getElementById("productModal")
-    .classList.remove("hidden");
+  document.getElementById(
+    "productModal"
+  ).classList.remove("hidden");
 
-  document.body.style.overflow = "hidden";
+  document.getElementById(
+    "modalName"
+  ).textContent = product.name;
 
-  document.getElementById("modalName")
-    .textContent =
-      product.name || "No Name";
+  const discountedPrice =
+    Number(product.price)
+      .toFixed(2);
 
-  let price = "0.00";
+  const originalPrice =
+    product.originalPrice || null;
 
-  if (typeof product.price === "number") {
+  const formattedOriginal =
+    originalPrice
+    ? Number(originalPrice)
+        .toFixed(2)
+    : null;
 
-    price =
-      (product.price / 100).toFixed(2);
+  document.getElementById(
+    "modalPrice"
+  ).innerHTML = `
 
-  }
+    ${
+      formattedOriginal
+      ? `
+        <span style="
+          text-decoration:
+            line-through;
 
-  document.getElementById("modalPrice")
-    .textContent = `₹${price}`;
+          opacity:0.6;
 
-  document.getElementById("modalDesc")
-    .textContent =
-      product.description ||
-      "No description available.";
+          font-size:15px;
 
-  document.getElementById("modalLink")
-    .href =
-      product.link || "#";
+          margin-right:8px;
+        ">
+          ₹${formattedOriginal}
+        </span>
+      `
+      : ""
+    }
 
-  // 🖼 IMAGES
+    <b>
+      ₹${discountedPrice}
+    </b>
+
+  `;
+
+  document.getElementById(
+    "modalDesc"
+  ).textContent =
+    product.description || "";
+
+  document.getElementById(
+    "modalLink"
+  ).href = product.link;
+
+  // 🎞 IMAGE SLIDER
+  const track =
+    document.getElementById(
+      "sliderTrack"
+    );
+
+  const controls =
+    document.getElementById(
+      "sliderControls"
+    );
+
+  track.innerHTML = "";
+  controls.innerHTML = "";
+
   const images =
-    (product.images || [product.image])
-      .filter(Boolean);
 
-  const sliderTrack =
-    document.getElementById("sliderTrack");
+    (product.images &&
+     product.images.length > 0)
 
-  const sliderControls =
-    document.getElementById("sliderControls");
+    ? product.images
 
-  sliderTrack.innerHTML = "";
-  sliderControls.innerHTML = "";
+    : (product.image
+        ? [product.image]
+        : []);
 
   let currentSlide = 0;
 
-  // 🎞 CREATE SLIDES
   images.forEach((img, index) => {
 
-    const slide =
-      document.createElement("div");
+    track.innerHTML += `
 
-    slide.className = "slide";
+      <div class="slide">
 
-    slide.innerHTML = `
-      <img src="${img}">
+        <img src="${img}">
+
+      </div>
+
     `;
 
-    sliderTrack.appendChild(slide);
+    controls.innerHTML += `
 
-    const dot =
-      document.createElement("button");
+      <button class="
+        slider-dot
+        ${index === 0 ? "active" : ""}
+      " data-index="${index}">
+      </button>
 
-    dot.className =
-      `slider-dot ${
-        index === 0 ? "active" : ""
-      }`;
-
-    dot.dataset.index = index;
-
-    sliderControls.appendChild(dot);
+    `;
 
   });
 
   const dots =
-    document.querySelectorAll(".slider-dot");
+    document.querySelectorAll(
+      ".slider-dot"
+    );
 
   function updateSlider(index) {
 
     if (index < 0) {
-      index = images.length - 1;
+
+      currentSlide =
+        images.length - 1;
+
+    } else if (
+      index >= images.length
+    ) {
+
+      currentSlide = 0;
+
+    } else {
+
+      currentSlide = index;
+
     }
 
-    if (index >= images.length) {
-      index = 0;
-    }
+    track.style.transform = `
+      translateX(
+        -${currentSlide * 100}%
+      )
+    `;
 
-    currentSlide = index;
-
-    sliderTrack.style.transform =
-      `translateX(-${currentSlide * 100}%)`;
-
-    dots.forEach(dot => {
-
-      dot.classList.remove("active");
-
-    });
+    dots.forEach(dot =>
+      dot.classList.remove("active")
+    );
 
     if (dots[currentSlide]) {
 
@@ -307,167 +430,129 @@ function openModal(product) {
 
   }
 
-  // 🔘 DOTS
   dots.forEach(dot => {
 
-    dot.addEventListener("click", () => {
+    dot.addEventListener(
+      "click",
+      () => {
 
-      updateSlider(
-        Number(dot.dataset.index)
-      );
+        updateSlider(
+          Number(
+            dot.dataset.index
+          )
+        );
 
-    });
+      }
+    );
 
   });
 
   // ⬅️➡️ BUTTONS
-  const oldPrev =
-    document.getElementById("prevSlide");
+  const prevBtn =
+    document.getElementById(
+      "prevSlide"
+    );
 
-  const oldNext =
-    document.getElementById("nextSlide");
+  const nextBtn =
+    document.getElementById(
+      "nextSlide"
+    );
 
-  const newPrev =
-    oldPrev.cloneNode(true);
+  prevBtn.onclick = () => {
 
-  const newNext =
-    oldNext.cloneNode(true);
+    updateSlider(
+      currentSlide - 1
+    );
 
-  oldPrev.parentNode.replaceChild(
-    newPrev,
-    oldPrev
-  );
+  };
 
-  oldNext.parentNode.replaceChild(
-    newNext,
-    oldNext
-  );
+  nextBtn.onclick = () => {
 
-  newPrev.addEventListener("click", () => {
+    updateSlider(
+      currentSlide + 1
+    );
 
-    updateSlider(currentSlide - 1);
-
-  });
-
-  newNext.addEventListener("click", () => {
-
-    updateSlider(currentSlide + 1);
-
-  });
-
-  // ⏱ AUTO SLIDE
-  clearInterval(window.sliderInterval);
-
-  if (images.length > 1) {
-
-    window.sliderInterval =
-      setInterval(() => {
-
-        updateSlider(currentSlide + 1);
-
-      }, 5000);
-
-  }
+  };
 
   updateSlider(0);
 
 }
 
 // ❌ CLOSE MODAL
-document.getElementById("closeModal")
-  .addEventListener("click", () => {
+document.getElementById(
+  "closeModal"
+).addEventListener(
+  "click",
+  () => {
 
-    document.getElementById("productModal")
-      .classList.add("hidden");
-
-    document.body.style.overflow = "auto";
-
-    clearInterval(window.sliderInterval);
-
-});
-
-// CLOSE ON OUTSIDE CLICK
-window.addEventListener("click", (e) => {
-
-  if (e.target.id === "productModal") {
-
-    document.getElementById("productModal")
-      .classList.add("hidden");
-
-    document.body.style.overflow = "auto";
-
-    clearInterval(window.sliderInterval);
+    document.getElementById(
+      "productModal"
+    ).classList.add("hidden");
 
   }
+);
 
-});
-
-// 🔍 SEARCH SYSTEM
-const searchInput =
-  document.getElementById("searchInput");
-
-const searchBtn =
-  document.getElementById("searchBtn");
-
+// 🔍 IMPROVED SEARCH
 function performSearch() {
 
-  const q =
-    searchInput.value.toLowerCase();
+  const query =
+    document.getElementById(
+      "searchInput"
+    ).value
+      .toLowerCase()
+      .trim();
 
   let filtered =
+    products.filter(p => {
 
-    products.filter(p =>
+      const searchableText = `
+        ${p.name || ""}
+        ${p.category || ""}
+        ${p.description || ""}
+      `.toLowerCase();
 
-      (p.name || "")
-        .toLowerCase()
-        .includes(q)
+      if (!query) {
+        return true;
+      }
 
-    );
+      const words =
+        query.split(" ")
+             .filter(Boolean);
 
-  if (activeCategory !== "All") {
+      return words.every(word =>
+        searchableText.includes(word)
+      );
+
+    });
+
+  // 🧭 CATEGORY FILTER
+  if (
+    activeCategory !== "All"
+  ) {
 
     filtered =
-      filtered.filter(p =>
-
-        p.category === activeCategory
-
+      filtered.filter(
+        p =>
+          p.category ===
+          activeCategory
       );
 
   }
 
-  render(filtered);
-
-  document.getElementById("productGrid")
-    .scrollIntoView({
-
-      behavior: "smooth"
-
-    });
+  renderProducts(filtered);
 
 }
 
-// 🔘 SEARCH BUTTON
-searchBtn.addEventListener(
+document.getElementById(
+  "searchBtn"
+).addEventListener(
   "click",
   performSearch
 );
 
-// ⌨️ ENTER KEY
-searchInput.addEventListener(
-  "keydown",
-  e => {
-
-    if (e.key === "Enter") {
-
-      performSearch();
-
-    }
-
-  }
-);
-
-// 🔎 LIVE SEARCH
-searchInput.addEventListener(
+document.getElementById(
+  "searchInput"
+).addEventListener(
   "input",
   performSearch
 );
@@ -476,35 +561,74 @@ searchInput.addEventListener(
 document.querySelectorAll(".tab")
   .forEach(tab => {
 
-    tab.addEventListener("click", () => {
+    tab.addEventListener(
+      "click",
+      () => {
 
-      document.querySelectorAll(".tab")
-        .forEach(t =>
-          t.classList.remove("active")
-        );
-
-      tab.classList.add("active");
-
-      activeCategory =
-        tab.dataset.category;
-
-      let filtered = [...products];
-
-      if (activeCategory !== "All") {
-
-        filtered =
-          filtered.filter(p =>
-
-            p.category === activeCategory
-
+        document
+          .querySelectorAll(".tab")
+          .forEach(t =>
+            t.classList.remove(
+              "active"
+            )
           );
 
+        tab.classList.add(
+          "active"
+        );
+
+        activeCategory =
+          tab.dataset.category;
+
+        performSearch();
+
       }
+    );
 
-      render(filtered);
+  });
 
-    });
+// 🌙 DARK MODE
+const themeToggle =
+  document.getElementById(
+    "themeToggle"
+  );
 
-});
+if (
+  localStorage.getItem("theme")
+  === "dark"
+) {
+
+  document.body.classList.add(
+    "dark"
+  );
+
+  themeToggle.textContent =
+    "☀️";
+
+}
+
+themeToggle.addEventListener(
+  "click",
+  () => {
+
+    document.body.classList.toggle(
+      "dark"
+    );
+
+    const dark =
+      document.body.classList.contains(
+        "dark"
+      );
+
+    themeToggle.textContent =
+      dark ? "☀️" : "🌙";
+
+    localStorage.setItem(
+      "theme",
+      dark ? "dark" : "light"
+    );
+
+  }
+);
 
 loadProducts();
