@@ -10,6 +10,8 @@ async function loadProducts() {
 
   renderDeals(products);
 
+  startDealTimers();
+
   renderProducts(products);
 
 }
@@ -93,6 +95,9 @@ function renderDeals(productsList) {
 
             <div class="deal-card"
                  data-id="${p.id}">
+                 <div class="deal-timer"
+     data-end="${p.dealEndsAt}">
+</div>
 
               ${
                 discountPercent
@@ -105,7 +110,8 @@ function renderDeals(productsList) {
               }
 
               <img src="${imageSrc}">
-
+              <div class="deal-timer" data-end="${p.dealEndsAt}">
+              </div>
               <h4>${p.name}</h4>
 
               <p>
@@ -184,7 +190,15 @@ function renderProducts(productsList) {
   const grid =
     document.getElementById("productGrid");
 
-  grid.innerHTML = productsList.map(p => {
+  grid.innerHTML = productsList
+.filter(p => {
+
+  if (p.deal !== true) return true;
+
+  return isDealExpired(p);
+
+})
+.map(p => {
 
     const discountedPrice =
       Number(p.price)
@@ -637,5 +651,59 @@ themeToggle.addEventListener(
 
   }
 );
+
+function startDealTimers() {
+
+  const timers =
+    document.querySelectorAll(".deal-timer");
+
+  timers.forEach(timer => {
+
+    const end =
+      Number(timer.dataset.end);
+
+    function update() {
+
+      const remaining =
+        end - Date.now();
+
+      if (remaining <= 0) {
+
+        timer.innerHTML =
+          "Deal Ended";
+
+        return;
+
+      }
+
+      const hours =
+        Math.floor(
+          remaining / (1000 * 60 * 60)
+        );
+
+      const minutes =
+        Math.floor(
+          (remaining % (1000 * 60 * 60))
+          / (1000 * 60)
+        );
+
+      const seconds =
+        Math.floor(
+          (remaining % (1000 * 60))
+          / 1000
+        );
+
+      timer.innerHTML =
+        `⏰ ${hours}h ${minutes}m ${seconds}s`;
+
+    }
+
+    update();
+
+    setInterval(update, 1000);
+
+  });
+
+}
 
 loadProducts();
