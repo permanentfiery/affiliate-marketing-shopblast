@@ -28,10 +28,13 @@ function renderDeals(productsList) {
   const dealSection =
     document.getElementById("dealSection");
 
-  const deals =
-    productsList.filter(
-      p => p.deal === true
-    );
+  const deals = productsList.filter(p => {
+
+  if (p.deal !== true) return false;
+
+  return !isDealExpired(p);
+
+});
 
   if (deals.length === 0) {
 
