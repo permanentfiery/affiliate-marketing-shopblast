@@ -285,82 +285,94 @@ form.addEventListener(
 
     });
 
-    const product = {
+   const product = {
 
-      name:
-        document.getElementById(
-          "name"
-        ).value,
+  name:
+    document.getElementById(
+      "name"
+    ).value,
 
-      price:
-        Number(
-          document.getElementById(
-            "price"
-          ).value
-        ),
-
-      originalPrice:
-        Number(
-          document.getElementById(
-            "originalPrice"
-          ).value
-        ) || null,
-
-      category:
-        document.getElementById(
-          "category"
-        ).value,
-
-      description:
-        document.getElementById(
-          "description"
-        ).value,
-
-      link:
-        document.getElementById(
-          "link"
-        ).value,
-
-      deal:
-  document.getElementById(
-    "deal"
-  ).value === "true",
-
-dealEndsAt:
-
-  document.getElementById(
-    "deal"
-  ).value === "true"
-
-    ? Date.now() + 86400000
-
-    : null,
-    const editId =
+  price:
+    Number(
       document.getElementById(
-        "editId"
-      ).value;
+        "price"
+      ).value
+    ),
 
-    if (editId) {
+  originalPrice:
+    Number(
+      document.getElementById(
+        "originalPrice"
+      ).value
+    ) || null,
 
-      await updateProduct(
-        editId,
-        product
-      );
+  category:
+    document.getElementById(
+      "category"
+    ).value,
 
-    } else {
+  description:
+    document.getElementById(
+      "description"
+    ).value,
 
-      await addProduct(product);
+  link:
+    document.getElementById(
+      "link"
+    ).value,
 
-    }
+  deal:
+    document.getElementById(
+      "deal"
+    ).value === "true",
 
-    form.reset();
+  dealEndsAt:
 
     document.getElementById(
-      "editId"
-    ).value = "";
+      "deal"
+    ).value === "true"
 
-    loadProducts();
+      ? Date.now() + 86400000
 
+      : null,
+
+  images,
+
+  image:
+    images[0] || ""
+
+};
+
+const editId =
+  document.getElementById(
+    "editId"
+  ).value;
+
+if (editId) {
+
+  await updateProduct(
+    editId,
+    product
+  );
+
+} else {
+
+  await addProduct(product);
+
+}
+
+form.reset();
+
+document.getElementById(
+  "editId"
+).value = "";
+
+loadProducts();
+
+  }
+);
+
+loadProducts();
   }
 );
 
