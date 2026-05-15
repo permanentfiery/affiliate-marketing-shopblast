@@ -374,6 +374,4 @@ loadProducts();
 
 loadProducts();
   
-);
 
-loadProducts();
