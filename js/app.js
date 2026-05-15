@@ -661,6 +661,15 @@ function startDealTimers() {
 
     const end =
       Number(timer.dataset.end);
+    
+    if (!end || isNaN(end)) {
+
+  timer.innerHTML =
+    "⏰ 24h";
+
+  return;
+
+}
 
     function update() {
 
