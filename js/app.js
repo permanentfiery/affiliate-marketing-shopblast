@@ -505,12 +505,12 @@ function openModal(product) {
 
     const nextBtn =
       modal.querySelector(
-        ".modal-next"
+        ".slider-next"
       );
 
     const prevBtn =
       modal.querySelector(
-        ".modal-prev"
+        ".slider-prev"
       );
 
     if (nextBtn) {
