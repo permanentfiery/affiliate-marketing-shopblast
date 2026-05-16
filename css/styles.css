@@ -260,17 +260,31 @@ body {
 }
 
 /* MODAL */
-.modal {
-  position: fixed;
-  inset: 0;
+.modal{
 
-  background: rgba(0,0,0,0.7);
+  position:fixed;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset:0;
 
-  z-index: 999;
+  width:100vw;
+  height:100vh;
+
+  background:rgba(0,0,0,0.75);
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  z-index:99999;
+
+  padding:20px;
+
+  box-sizing:border-box;
+
+  overflow:auto;
+
 }
 
 .hidden {
@@ -479,5 +493,35 @@ body {
   .card img{
     height:220px;
   }
+
+}
+/* DEAL CARD DARK MODE */
+
+body.dark .deal-card{
+
+  background:#181818;
+
+  color:white;
+
+  border-color:yellow;
+
+}
+
+body.dark .deal-card h4,
+body.dark .deal-card p{
+
+  color:white;
+
+}
+
+body.dark .deal-card img{
+
+  background:#222;
+
+}
+
+body.dark .deal{
+
+  background:#111;
 
 }
