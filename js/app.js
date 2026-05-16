@@ -479,7 +479,20 @@ function openModal(product) {
         modal.classList.add(
           "hidden"
         );
+      modal.addEventListener(
+  "click",
+  e => {
 
+    if (e.target === modal) {
+
+      modal.classList.add(
+        "hidden"
+      );
+
+    }
+
+  }
+);
       }
     );
 
