@@ -396,25 +396,32 @@ function openModal(product) {
 
         <div class="modal-left">
 
-          <img id="modalImage"
-               src="${images[currentImage]}">
+          <div class="modal-image-container">
 
-          ${
-            images.length > 1
-            ? `
-              <button class="modal-nav modal-prev">
-                ‹
-              </button>
+  ${
+    images.length > 1
+    ? `
+      <button class="slider-nav slider-prev">
+        ‹
+      </button>
+    `
+    : ""
+  }
 
-              <button class="modal-nav modal-next">
-                ›
-              </button>
-            `
-            : ""
-          }
+  <img id="modalImage"
+       src="${images[currentImage]}">
 
-        </div>
+  ${
+    images.length > 1
+    ? `
+      <button class="slider-nav slider-next">
+        ›
+      </button>
+    `
+    : ""
+  }
 
+</div>
         <div class="modal-right">
 
           <h2>
