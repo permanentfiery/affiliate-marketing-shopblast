@@ -308,6 +308,22 @@ body {
 
   position:relative;
 
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:#111;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  padding:20px;
+
+  min-height:480px;
+
 }
 
 .modal-left img{
@@ -318,11 +334,16 @@ body {
 
   object-fit:contain;
 
-  border:2px solid #333;
+  border-radius:16px;
 
   background:#fff;
 
   display:block;
+
+  transition:0.3s ease;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.4);
 
 }
 .modal-nav{
