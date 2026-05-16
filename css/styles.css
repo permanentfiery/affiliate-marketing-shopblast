@@ -304,17 +304,62 @@ body {
   box-sizing:border-box;
 
 }
+.modal-left{
+
+  position:relative;
+
+}
+
 .modal-left img{
 
   width:100%;
 
-  max-height:500px;
+  max-height:420px;
 
   object-fit:contain;
 
   border:2px solid #333;
 
   background:#fff;
+
+  display:block;
+
+}
+.modal-nav{
+
+  position:absolute;
+
+  top:50%;
+
+  transform:translateY(-50%);
+
+  background:rgba(0,0,0,0.7);
+
+  color:white;
+
+  border:none;
+
+  width:42px;
+
+  height:42px;
+
+  cursor:pointer;
+
+  font-size:24px;
+
+  z-index:10;
+
+}
+
+.modal-prev{
+
+  left:10px;
+
+}
+
+.modal-next{
+
+  right:10px;
 
 }
 
