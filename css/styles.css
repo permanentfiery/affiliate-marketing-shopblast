@@ -181,18 +181,20 @@ body {
   position: relative;
 }
 
-.deal-card img {
-  width: 100%;
+.deal-card img{
 
-  height: 260px;
+  width:100%;
 
-  object-fit: cover;
+  height:240px;
 
-  display: block;
+  object-fit:cover;
 
-  border: 2px solid black;
+  border-radius:12px;
 
-  background: #f3f3f3;
+  display:block;
+
+  background:#f2f2f2;
+
 }
 
 .deal-card h4 {
@@ -324,7 +326,7 @@ body {
 
   position:relative;
 
-  height:460px;
+  height:380px;
 
   display:flex;
 
@@ -338,6 +340,10 @@ body {
 
   overflow:hidden;
 
+  padding:12px;
+
+  box-sizing:border-box;
+
 }
 
 .modal-left img{
@@ -346,15 +352,17 @@ body {
 
   height:100%;
 
+  max-width:100%;
+
+  max-height:100%;
+
   object-fit:contain;
 
-  border-radius:16px;
+  border-radius:14px;
 
   background:#fff;
 
-  padding:10px;
-
-  box-sizing:border-box;
+  display:block;
 
 }
 .modal-nav{
@@ -365,23 +373,23 @@ body {
 
   transform:translateY(-50%);
 
-  width:48px;
+  width:42px;
 
-  height:48px;
+  height:42px;
 
   border:none;
 
   border-radius:50%;
 
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.75);
 
   color:white;
 
-  font-size:28px;
+  font-size:24px;
 
   cursor:pointer;
 
-  z-index:20;
+  z-index:50;
 
   display:flex;
 
@@ -393,13 +401,13 @@ body {
 
 .modal-prev{
 
-  left:12px;
+  left:8px;
 
 }
 
 .modal-next{
 
-  right:12px;
+  right:8px;
 
 }
 .modal-nav:hover{
