@@ -556,4 +556,25 @@ if (themeToggle) {
   );
 
 }
+// 🔍 SEARCH
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+if (searchInput) {
+
+  searchInput.addEventListener(
+    "input",
+    e => {
+
+      searchQuery =
+        e.target.value;
+
+      renderProducts(products);
+
+    }
+  );
+
+}
 loadProducts();
