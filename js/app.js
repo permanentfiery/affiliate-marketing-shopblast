@@ -203,7 +203,46 @@ function renderProducts(productsList) {
       "productGrid"
     );
 
-  grid.innerHTML = productsList
+ const filteredProducts =
+  productsList
+
+  .filter(p => {
+
+    if (p.deal !== true)
+      return true;
+
+    return isDealExpired(p);
+
+  })
+
+  .filter(p => {
+
+    if (
+      activeCategory !== "All" &&
+      p.category !== activeCategory
+    ) {
+
+      return false;
+
+    }
+
+    if (!searchQuery)
+      return true;
+
+    const text = `
+      ${p.name}
+      ${p.description || ""}
+      ${p.category || ""}
+    `.toLowerCase();
+
+    return text.includes(
+      searchQuery.toLowerCase()
+    );
+
+  });
+
+grid.innerHTML =
+  filteredProducts
 
   .filter(p => {
 
