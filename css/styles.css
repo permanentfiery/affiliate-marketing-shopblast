@@ -310,6 +310,8 @@ body {
 
   position:relative;
 
+  height:460px;
+
   display:flex;
 
   align-items:center;
@@ -322,17 +324,13 @@ body {
 
   overflow:hidden;
 
-  padding:20px;
-
-  min-height:480px;
-
 }
 
 .modal-left img{
 
   width:100%;
 
-  max-height:420px;
+  height:100%;
 
   object-fit:contain;
 
@@ -340,12 +338,9 @@ body {
 
   background:#fff;
 
-  display:block;
+  padding:10px;
 
-  transition:0.3s ease;
-
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.4);
+  box-sizing:border-box;
 
 }
 .modal-nav{
