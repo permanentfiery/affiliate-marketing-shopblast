@@ -351,19 +351,19 @@ body {
 
   transform:translateY(-50%);
 
-  width:52px;
+  width:48px;
 
-  height:52px;
+  height:48px;
 
   border:none;
 
   border-radius:50%;
 
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.7);
 
   color:white;
 
-  font-size:30px;
+  font-size:28px;
 
   cursor:pointer;
 
@@ -375,12 +375,19 @@ body {
 
   justify-content:center;
 
-  transition:0.2s ease;
+}
 
-  backdrop-filter:blur(8px);
+.modal-prev{
+
+  left:12px;
 
 }
 
+.modal-next{
+
+  right:12px;
+
+}
 .modal-nav:hover{
 
   background:yellow;
