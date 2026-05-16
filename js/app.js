@@ -354,16 +354,19 @@ grid.innerHTML =
 // 🪟 MODAL
 function openModal(product) {
 
-  document.getElementById(
-    "productModal"
-  ).classList.remove(
-    "hidden"
-  );
+  const modal =
+    document.getElementById(
+      "productModal"
+    );
 
-  document.getElementById(
-    "modalName"
-  ).textContent =
-    product.name;
+  const imageSrc =
+
+    (product.images &&
+     product.images.length > 0)
+
+    ? product.images[0]
+
+    : (product.image || "");
 
   const discountedPrice =
     Number(product.price)
@@ -378,47 +381,91 @@ function openModal(product) {
         .toFixed(2)
     : null;
 
-  document.getElementById(
-    "modalPrice"
-  ).innerHTML = `
+  modal.innerHTML = `
 
-    ${
-      formattedOriginal
-      ? `
-        <span style="
-          text-decoration:
-            line-through;
+    <div class="modal-content">
 
-          opacity:0.6;
+      <span id="closeModal"
+            class="close">
+        ×
+      </span>
 
-          font-size:15px;
+      <div class="modal-left">
 
-          margin-right:8px;
-        ">
-          ₹${formattedOriginal}
-        </span>
-      `
-      : ""
-    }
+        <img src="${imageSrc}">
 
-    <b>
-      ₹${discountedPrice}
-    </b>
+      </div>
+
+      <div class="modal-right">
+
+        <h2>
+          ${product.name}
+        </h2>
+
+        <p>
+
+          ${
+            formattedOriginal
+            ? `
+              <span style="
+                text-decoration:
+                  line-through;
+
+                opacity:0.6;
+
+                margin-right:8px;
+              ">
+                ₹${formattedOriginal}
+              </span>
+            `
+            : ""
+          }
+
+          <b>
+            ₹${discountedPrice}
+          </b>
+
+        </p>
+
+        <p>
+          ${
+            product.description
+            || "No description"
+          }
+        </p>
+
+        <a class="buy"
+           href="${product.link}"
+           target="_blank">
+
+          BUY NOW
+
+        </a>
+
+      </div>
+
+    </div>
 
   `;
 
-  document.getElementById(
-    "modalDesc"
-  ).textContent =
-    product.description || "";
+  modal.classList.remove(
+    "hidden"
+  );
 
   document.getElementById(
-    "modalLink"
-  ).href =
-    product.link;
+    "closeModal"
+  ).addEventListener(
+    "click",
+    () => {
+
+      modal.classList.add(
+        "hidden"
+      );
+
+    }
+  );
 
 }
-
 // ❌ CLOSE MODAL
 document.getElementById(
   "closeModal"
