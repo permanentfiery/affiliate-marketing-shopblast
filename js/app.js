@@ -2,6 +2,7 @@ import { getProducts } from "./db.js";
 
 let products = [];
 let activeCategory = "All";
+let searchQuery = "";
 
 // 📦 LOAD PRODUCTS
 async function loadProducts() {
