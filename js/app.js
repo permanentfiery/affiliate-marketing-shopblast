@@ -359,14 +359,16 @@ function openModal(product) {
       "productModal"
     );
 
-  const imageSrc =
+  const images =
 
     (product.images &&
      product.images.length > 0)
 
-    ? product.images[0]
+    ? product.images
 
-    : (product.image || "");
+    : [product.image || ""];
+
+  let currentImage = 0;
 
   const discountedPrice =
     Number(product.price)
@@ -381,88 +383,158 @@ function openModal(product) {
         .toFixed(2)
     : null;
 
-  modal.innerHTML = `
+  function renderModal() {
 
-    <div class="modal-content">
+    modal.innerHTML = `
 
-      <span id="closeModal"
-            class="close">
-        ×
-      </span>
+      <div class="modal-content">
 
-      <div class="modal-left">
+        <span id="closeModal"
+              class="close">
+          ×
+        </span>
 
-        <img src="${imageSrc}">
+        <div class="modal-left">
 
-      </div>
-
-      <div class="modal-right">
-
-        <h2>
-          ${product.name}
-        </h2>
-
-        <p>
+          <img id="modalImage"
+               src="${images[currentImage]}">
 
           ${
-            formattedOriginal
+            images.length > 1
             ? `
-              <span style="
-                text-decoration:
-                  line-through;
+              <button class="modal-nav modal-prev">
+                ‹
+              </button>
 
-                opacity:0.6;
-
-                margin-right:8px;
-              ">
-                ₹${formattedOriginal}
-              </span>
+              <button class="modal-nav modal-next">
+                ›
+              </button>
             `
             : ""
           }
 
-          <b>
-            ₹${discountedPrice}
-          </b>
+        </div>
 
-        </p>
+        <div class="modal-right">
 
-        <p>
-          ${
-            product.description
-            || "No description"
-          }
-        </p>
+          <h2>
+            ${product.name}
+          </h2>
 
-        <a class="buy"
-           href="${product.link}"
-           target="_blank">
+          <p>
 
-          BUY NOW
+            ${
+              formattedOriginal
+              ? `
+                <span style="
+                  text-decoration:
+                    line-through;
 
-        </a>
+                  opacity:0.6;
+
+                  margin-right:8px;
+                ">
+                  ₹${formattedOriginal}
+                </span>
+              `
+              : ""
+            }
+
+            <b>
+              ₹${discountedPrice}
+            </b>
+
+          </p>
+
+          <p>
+            ${
+              product.description
+              || "No description"
+            }
+          </p>
+
+          <a class="buy"
+             href="${product.link}"
+             target="_blank">
+
+            BUY NOW
+
+          </a>
+
+        </div>
 
       </div>
 
-    </div>
+    `;
 
-  `;
+    const closeBtn =
+      document.getElementById(
+        "closeModal"
+      );
 
-  modal.classList.remove(
-    "hidden"
-  );
+    closeBtn.addEventListener(
+      "click",
+      () => {
 
-  document.getElementById(
-    "closeModal"
-  ).addEventListener(
-    "click",
-    () => {
+        modal.classList.add(
+          "hidden"
+        );
 
-      modal.classList.add(
-        "hidden"
+      }
+    );
+
+    const nextBtn =
+      modal.querySelector(
+        ".modal-next"
+      );
+
+    const prevBtn =
+      modal.querySelector(
+        ".modal-prev"
+      );
+
+    if (nextBtn) {
+
+      nextBtn.addEventListener(
+        "click",
+        () => {
+
+          currentImage =
+            (currentImage + 1)
+            % images.length;
+
+          renderModal();
+
+        }
       );
 
     }
+
+    if (prevBtn) {
+
+      prevBtn.addEventListener(
+        "click",
+        () => {
+
+          currentImage =
+            (
+              currentImage - 1 +
+              images.length
+            ) % images.length;
+
+          renderModal();
+
+        }
+      );
+
+    }
+
+  }
+
+  renderModal();
+
+  modal.classList.remove(
+    "hidden"
   );
 
 }
