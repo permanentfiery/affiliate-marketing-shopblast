@@ -277,15 +277,85 @@ body {
   display: none;
 }
 
-.modal-content {
-  background: white;
+.modal-content{
 
-  padding: 20px;
+  background:#fff;
 
-  width: 90%;
-  max-width: 800px;
+  width:90%;
+  max-width:1000px;
 
-  position: relative;
+  max-height:90vh;
+
+  overflow-y:auto;
+
+  border:4px solid yellow;
+
+  padding:24px;
+
+  position:relative;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:24px;
+
+  box-sizing:border-box;
+
+}
+.modal-left img{
+
+  width:100%;
+
+  max-height:500px;
+
+  object-fit:contain;
+
+  border:2px solid #333;
+
+  background:#fff;
+
+}
+
+.modal-right{
+
+  overflow-y:auto;
+
+}
+
+.modal-right h2{
+
+  margin-top:0;
+
+  font-size:40px;
+
+  line-height:1.2;
+
+}
+
+.modal-right p{
+
+  line-height:1.6;
+
+  font-size:16px;
+
+}
+
+@media(max-width:768px){
+
+  .modal-content{
+
+    grid-template-columns:1fr;
+
+  }
+
+  .modal-right h2{
+
+    font-size:28px;
+
+  }
+
 }
 
 .close {
